@@ -24,27 +24,28 @@ public class PlayerListenerMMM extends PlayerListener{
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] args = event.getMessage().split(" ");
         String command = args[0].substring(1);
-        if(!CommandMMM.isValid(command)) return;
+        String msg ="";
+        if(!plugin.isValid(command)) return;
         Player player = event.getPlayer();
         event.setCancelled(true);
         if (player.hasPermission("mmm.command."+command)){
-            String group = CommandMMM.getGroup(command);
+            String group = plugin.getGroup(command);
             if (group==null){
-                player.sendMessage("Configuration error for command: "+command);
+                msg = "Configuration error for command: "+command;
+                plugin.sendMessage(msg, player);
                 return;
             }
             String world = player.getWorld().getName();
-            String msg;
-            if (plugin.changeGroup(player, group, world)){
-                msg = "Successfully changed "+player+" to group "+group+" in world "+world;
-            } else {
-                msg = "Unuccessfully changed "+player+" to group "+group+" in world "+world;
-            }
-            plugin.sendMessage(msg, player);
+            
+            msg = plugin.executeChange(player, group, world);
+
 
         } else {
-            player.sendMessage("You don't have the permission mmm.command."+command+"!");
+            msg = "You don't have the permission mmm.command."+command+"!";
         }
+        plugin.sendMessage(msg, player);
     }
+
+
 }
 

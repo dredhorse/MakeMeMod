@@ -15,4 +15,6 @@ permissions:
     MMM.reload:
         description: Allows reloading of MakeMeMod config
         default: OP
-
+    MMM.command:
+        description: Allows executing of MMM command
+        default: OP

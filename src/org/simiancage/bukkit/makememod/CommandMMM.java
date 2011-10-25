@@ -19,6 +19,7 @@ public class CommandMMM implements CommandExecutor {
     private static MakeMeMod plugin;
     private static Configuration configuration;
 
+
     public CommandMMM(MakeMeMod plugin) {
         this.plugin = plugin;
         this.configuration = plugin.configuration;
@@ -26,12 +27,33 @@ public class CommandMMM implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	Player player = null;
+        String msg = "";
+        String cmd = "";
     	if (sender instanceof Player) {
     		player = (Player) sender;
     	}
       	if (command.getName().equalsIgnoreCase("mmm")){
-                   String subcommand = // ToDo figure out how to get the command after mmm
 
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("reload")){
+                    GetConfigMMM.GetConfig();
+                    msg = plugin.logName + "reloaded config!";
+                } else {
+                    cmd = args[0];
+                    if (plugin.isValid(cmd)){
+                        String group = plugin.getGroup(cmd);
+                        String world = plugin.getServer().getPlayer(player.toString()).getWorld().getName();
+                        msg = plugin.executeChange(player, group, world);
+
+                    }else{
+                        msg = plugin.logName + "there is no config for: "+cmd;
+                    }
+                }
+            plugin.sendMessage(msg, player);
+            } else {
+                msg = "/mmm groupname = switches to groupname and back";
+                player.sendMessage(msg);
+            }
 
     		return true;
     	}
@@ -39,20 +61,5 @@ public class CommandMMM implements CommandExecutor {
     }
 
 
-
-    public static Boolean isValid(String command)
-    {
-        // ToDo make sure this works
-        return configuration.getConfigurationSection("alias-list").contains(command);
-    }
-
-    public static String getGroup(String command) {
-        // ToDo make sure this works
-        String group = configuration.getString("alias-list"+"."+command);
-        if (group==null){
-            plugin.log.warning(plugin.logName+"There is no group for command:"+command);
-        }
-        return group;
-    }
 }
 

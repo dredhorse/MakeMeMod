@@ -3,7 +3,6 @@ package org.simiancage.bukkit.makememod;
 
 
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,8 +19,8 @@ import java.util.zip.ZipEntry;
 
 public class GetConfigMMM {
 
-    private static MakeMeMod plugin;
-    private static Configuration configuration;
+    static public MakeMeMod plugin;
+    static Configuration configuration;
 
 
 
@@ -31,12 +30,12 @@ public class GetConfigMMM {
     }
 
 
-    static void CheckDefaultConfig () {
+    static void CheckDefaultConfig() {
 
         if (!plugin.configFile.exists()) {
             new File(plugin.getDataFolder().toString()).mkdir();
             try {
-                JarFile jar = new JarFile("plugins" + System.getProperty("file.separator") +plugin.getDescription().getName() + ".jar");
+                JarFile jar = new JarFile("plugins" + System.getProperty("file.separator") + plugin.getDescription().getName() + ".jar");
                 ZipEntry config = jar.getEntry("config.yml");
                 InputStream in = new BufferedInputStream(jar.getInputStream(config));
                 OutputStream out = new BufferedOutputStream(new FileOutputStream(plugin.configFile));
@@ -56,14 +55,21 @@ public class GetConfigMMM {
         }
     }
 
-    static void GetConfig () {
+    static void GetConfig() {
         configuration = plugin.getConfig();
-        configuration.addDefault("broadcast-all",plugin.broadcastAll);
-        configuration.addDefault("broadcast-group",plugin.broadcastGroup);
-        configuration.addDefault("broadcast-targets",plugin.broadcastTargets);
+        configuration.addDefault("broadcast-all", plugin.broadcastAll);
+        configuration.addDefault("broadcast-group", plugin.broadcastGroup);
+        configuration.addDefault("broadcast-targets", plugin.broadcastTargets);
+        plugin.configVer=configuration.getString("configVer");
+        System.out.print(plugin.configVer);
         plugin.broadcastAll=configuration.getBoolean("broadcast-all");
+        System.out.print(plugin.broadcastAll);
         plugin.broadcastGroup=configuration.getBoolean("broadcast-groups");
+        System.out.print(plugin.broadcastGroup);
         plugin.broadcastTargets=(ArrayList<String>) configuration.getList("broadcast-targets");
+        System.out.print(plugin.broadcastTargets);
+        plugin.changeCommands=configuration.getList("alias-list");
+        System.out.print(plugin.changeCommands);
     }
 
 
