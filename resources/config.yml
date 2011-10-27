@@ -20,8 +20,9 @@ broadcast-targets:
 # ----- Group Change Commands
 #
 # Customize Group Change Commands in form of
-# command: Group
+# command: GroupTheyAreIn,GroupTheyShouldBeIn
 #
 alias-list:
-- mod:Moderators
-- admin:Admins
+    mod: Builder,Moderators
+    admin: Moderators,Admins
+    

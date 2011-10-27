@@ -26,38 +26,58 @@ public class CommandMMM implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    	Player player = null;
+        Player player = null;
         String msg = "";
         String cmd = "";
-    	if (sender instanceof Player) {
-    		player = (Player) sender;
-    	}
-      	if (command.getName().equalsIgnoreCase("mmm")){
+        if (sender instanceof Player) {
+            player = (Player) sender;
+        }
+        if (command.getName().equalsIgnoreCase("mmm")){
 
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("reload")){
+                    plugin.reloadConfig();
                     GetConfigMMM.GetConfig();
                     msg = plugin.logName + "reloaded config!";
+                    plugin.sendMessage(msg, player);
+                    return true;
                 } else {
-                    cmd = args[0];
-                    if (plugin.isValid(cmd)){
-                        String group = plugin.getGroup(cmd);
-                        String world = plugin.getServer().getPlayer(player.toString()).getWorld().getName();
-                        msg = plugin.executeChange(player, group, world);
 
-                    }else{
-                        msg = plugin.logName + "there is no config for: "+cmd;
+                    cmd = args[0];
+                    System.out.print("well "+cmd);
+                    System.out.print(player.getName());
+                    if (player.hasPermission("mmm.command.engi")){
+                        System.out.print("hmm"+plugin.isValid(cmd));
+                        if (plugin.isValid(cmd)){
+                            String newGroup = plugin.getNewGroup(cmd);
+                            String oldGroup = plugin.getOldGroup(cmd);
+                            String world = player.getWorld().getName();
+                            if (!plugin.changeBack(player))
+                            {
+                                msg = plugin.executeChange(player, oldGroup, newGroup, world);
+                            }
+
+                        }else{
+                            msg = plugin.logName + "there is no config for: "+cmd;
+                        }
+                        plugin.sendMessage(msg, player);
+                    } else {
+                        player.sendMessage("You don't have the permission to do that.");
                     }
+
                 }
-            plugin.sendMessage(msg, player);
             } else {
                 msg = "/mmm groupname = switches to groupname and back";
-                player.sendMessage(msg);
+                if (!(player==null)){
+                    player.sendMessage(msg);
+                } else {
+                    plugin.log.info(plugin.logName + "Try mmm reload or just let it be!");
+                }
             }
 
-    		return true;
-    	}
-    	return false;
+            return true;
+        }
+        return false;
     }
 
 

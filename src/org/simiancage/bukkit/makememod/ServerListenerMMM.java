@@ -27,10 +27,11 @@ public class ServerListenerMMM extends ServerListener{
     public void onPluginEnable(PluginEnableEvent event) {
         PluginManager pm = plugin.getServer().getPluginManager();
         Plugin pex = pm.getPlugin("PermissionsEx");
-        if (!plugin.usingpex && !(pex == null))
+        if (!plugin.usingPerm && !(pex == null))
         {
             plugin.pexPlugin = PermissionsEx.getPermissionManager();
-            plugin.usingpex = true;
+            plugin.usingPerm = true;
+            plugin.permUsed = MakeMeMod.PERM_SYS.PEX;
             plugin.log.info(plugin.logName + "is using PEX now.");
         }
 
@@ -40,9 +41,9 @@ public class ServerListenerMMM extends ServerListener{
     public void onPluginDisable(PluginDisableEvent event) {
         PluginManager pm = plugin.getServer().getPluginManager();
         Plugin pex = pm.getPlugin("PermissionsEx");
-        if (plugin.usingpex && (pex == null))
+        if (plugin.usingPerm && (pex == null))
         {
-            plugin.usingpex = false;
+            plugin.usingPerm = false;
             plugin.log.info(plugin.logName + "is not using PEX anymore.");
 
         }

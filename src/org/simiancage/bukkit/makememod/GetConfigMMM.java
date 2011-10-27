@@ -6,6 +6,7 @@ import org.bukkit.configuration.Configuration;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -61,15 +62,10 @@ public class GetConfigMMM {
         configuration.addDefault("broadcast-group", plugin.broadcastGroup);
         configuration.addDefault("broadcast-targets", plugin.broadcastTargets);
         plugin.configVer=configuration.getString("configVer");
-        System.out.print(plugin.configVer);
         plugin.broadcastAll=configuration.getBoolean("broadcast-all");
-        System.out.print(plugin.broadcastAll);
         plugin.broadcastGroup=configuration.getBoolean("broadcast-groups");
-        System.out.print(plugin.broadcastGroup);
         plugin.broadcastTargets=(ArrayList<String>) configuration.getList("broadcast-targets");
-        System.out.print(plugin.broadcastTargets);
-        plugin.changeCommands=configuration.getList("alias-list");
-        System.out.print(plugin.changeCommands);
+        plugin.changeCommands=configuration.getConfigurationSection("alias-list").getValues(true);
     }
 
 
