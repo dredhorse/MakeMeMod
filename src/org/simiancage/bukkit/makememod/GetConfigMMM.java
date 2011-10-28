@@ -6,7 +6,6 @@ import org.bukkit.configuration.Configuration;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -61,10 +60,12 @@ public class GetConfigMMM {
         configuration.addDefault("broadcast-all", plugin.broadcastAll);
         configuration.addDefault("broadcast-group", plugin.broadcastGroup);
         configuration.addDefault("broadcast-targets", plugin.broadcastTargets);
+        configuration.addDefault("general-perm-changes", plugin.generalPermChanges);
         plugin.configVer=configuration.getString("configVer");
         plugin.broadcastAll=configuration.getBoolean("broadcast-all");
         plugin.broadcastGroup=configuration.getBoolean("broadcast-groups");
         plugin.broadcastTargets=(ArrayList<String>) configuration.getList("broadcast-targets");
+        plugin.generalPermChanges=configuration.getBoolean("general-perm-changes");
         plugin.changeCommands=configuration.getConfigurationSection("alias-list").getValues(true);
     }
 

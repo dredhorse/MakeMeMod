@@ -2,6 +2,7 @@ package org.simiancage.bukkit.makememod;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
@@ -32,10 +33,10 @@ public class MakeMeMod extends JavaPlugin{
     protected ArrayList<String> broadcastTargets = new ArrayList<String>();
     protected Map<String, Object> changeCommands;
 
+
     ServerListenerMMM serverListener = new ServerListenerMMM(this);
     PlayerListenerMMM playerListener = new PlayerListenerMMM(this);
     GetConfigMMM getConfigMMM = new GetConfigMMM(this);
-    PersistanceMMM persistanceMMM = new PersistanceMMM(this);
     boolean usingPerm;
     protected Logger log;
     protected File configFile;
@@ -43,12 +44,11 @@ public class MakeMeMod extends JavaPlugin{
     protected String pluginName;
     protected String pluginVersion;
     protected String pluginPath;
-    protected File persistanceFile;
     protected ArrayList<String> pluginAuthor;
-    protected Map<Player, String> groupModification = new HashMap<Player, String>();
     protected PermissionManager pexPlugin = null;
     protected FileConfiguration configuration;
     MakeMeMod plugin = this;
+    protected boolean generalPermChanges;
 
     public enum PERM_SYS {PEX,BPER,SUPPERM}
 
@@ -67,22 +67,13 @@ public class MakeMeMod extends JavaPlugin{
         pluginAuthor = getDescription().getAuthors();
         pluginPath = getDataFolder() + System.getProperty("file.separator");
         configFile = new File(pluginPath+"config.yml");
-        persistanceFile = new File(pluginPath+"Persistance.obj");
-
         GetConfigMMM.CheckDefaultConfig();
         GetConfigMMM.GetConfig();
-        Object result;
-        result = PersistanceMMM.load();
-        if (!(result == null)) {
-            groupModification =  (HashMap<Player, String>)result;
-            // Todo making persistance work
-        }
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
         addCommands();
-        System.out.print(configVer);
         if (!configVer.equals(configVersion))
         {
             log.warning(logName + "Your config file is out of date! Rename your config and reload to see the new options.");
@@ -93,10 +84,8 @@ public class MakeMeMod extends JavaPlugin{
 
 
     public void onDisable() {
-        PersistanceMMM.save(groupModification);
         log.info(logName + "Disabled");
         GetConfigMMM getConfigMMM = null;
-        PersistanceMMM persistanceMMM = null;
         CommandMMM commandMMM = null;
     }
 
@@ -114,67 +103,40 @@ public class MakeMeMod extends JavaPlugin{
             switch (permUsed){
                 case PEX: {
                     PermissionUser user = pexPlugin.getUser(player);
-                    groupModification.put(player, oldGroup+";"+newGroup+";"+world);
-                    user.removeGroup(oldGroup,world);
-                    user.addGroup(newGroup,world);
+
+                    // Check if we are upgrading = player is still in the oldGroup
+                    boolean isUpgrade = user.inGroup(oldGroup);
+                    System.out.print(isUpgrade);
+                    if (!isUpgrade)
+                    // We are going back to the oldGroup
+                    {
+                        String t = oldGroup;
+                        System.out.print(t);
+                        oldGroup = newGroup;
+                        System.out.print(oldGroup);
+                        newGroup = t;
+                        System.out.print(newGroup);
+                    }
+                    if (generalPermChanges)
+                    {
+                        user.removeGroup(oldGroup,world);
+                        user.addGroup(newGroup,world);
+                    } else {
+                        user.removeGroup(oldGroup);
+                        user.addGroup(newGroup);
+                    }
                     changedGroup= true;
                 }
-                default: {
-                    player.sendMessage ("No Permission System found");
-                }
+
             }
         }
         return changedGroup;
     }
 
-    boolean changeBack (Player player) {
-        boolean changedBack = false;
-        if (usingPerm)
-        {
-            if (groupModification.containsKey(player))
-            {
-                String[] groupMod=groupModification.get(player).split(";");
-                String oldGroup=groupMod[0];
-                String newGroup=groupMod[1];
-                String world=groupMod[2];
-                String msg;
-                switch (permUsed) {
-                    case PEX: {
-
-                        PermissionUser user = pexPlugin.getUser(player);
-                        user.removeGroup(newGroup, world);
-                        user.addGroup(oldGroup, world);
-                        changedBack = setChangedBack(player, oldGroup, world);
-
-                    }
-                    default: {
-                        msg = "Unsuccessfully changed "+player+" to group "+newGroup+" in world "+world;
-                        sendMessage(msg,player);
-                    }
-                }
-
-
-
-
-            }
-        }
-        return changedBack;
-    }
-
-    private boolean setChangedBack(Player player, String oldGroup, String world) {
-        boolean changedBack;
-        changedBack = true;
-        groupModification.remove(player);
-        String msg = "Successfully changed "+player+" to group "+oldGroup+" in world "+world;
-        sendMessage(msg,player);
-        return changedBack;
-    }
 
     void sendMessage (String msg, Player player) {
+        // ToDo condense it more, look for console sender and also enable logging
         if (!(player==null)){
-            System.out.print(broadcastAll);
-            System.out.print(broadcastGroup);
-            System.out.print((broadcastAll && broadcastGroup));
             if ((!broadcastAll && broadcastGroup && usingPerm)) {
                 for (String groups: broadcastTargets) {
                     for (Player allPlayers: getServer().getOnlinePlayers()){
@@ -184,7 +146,7 @@ public class MakeMeMod extends JavaPlugin{
 
                                 if (pexPlugin.getUsers(groups,world).toString().contains(allPlayers.getName()))
                                 {
-                                    allPlayers.sendMessage("bg"+msg);
+                                    allPlayers.sendMessage(msg);
                                 }
                             }
                             default:
@@ -196,10 +158,10 @@ public class MakeMeMod extends JavaPlugin{
                 }
             }
             if (broadcastAll) {
-                getServer().broadcastMessage("ba"+msg);
+                getServer().broadcastMessage(msg);
 
             } else {
-                player.sendMessage("op"+msg);
+                player.sendMessage(msg);
             }
         } else {
             log.info(msg);
@@ -209,9 +171,9 @@ public class MakeMeMod extends JavaPlugin{
     String executeChange(Player player, String oldGroup, String newGroup, String world) {
         String msg;
         if (changeGroup(player, oldGroup, newGroup, world)){
-            msg = "Successfully changed "+player+" to group "+newGroup+" in world "+world;
+            msg = "Successfully changed "+player.getName()+" to group "+newGroup+" in world "+world;
         } else {
-            msg = "Unsuccessfully changed "+player+" to group "+newGroup+" in world "+world;
+            msg = "Unsuccessfully changed "+player.getName()+" to group "+newGroup+" in world "+world;
         }
         return msg;
     }
@@ -220,29 +182,25 @@ public class MakeMeMod extends JavaPlugin{
 
     public Boolean isValid(String command)
     {
-        System.out.print("ChangeCommands"+changeCommands);
-
-        System.out.print("isvalid "+ changeCommands.containsKey(command));
         return changeCommands.containsKey(command);
-        // return changeCommands.contains(command);
     }
 
     public String getOldGroup(String command) {
-        // ToDo make sure this works
         String[] groups = changeCommands.get(command).toString().split(",");
         String oldGroup = groups[0];
+        System.out.print("oldGroup= "+oldGroup);
         if (oldGroup==null){
-            log.warning(logName+"There is no group for command:"+command);
+            log.warning(logName+"There is no OldGroup for command:"+command);
         }
         return oldGroup;
     }
 
     public String getNewGroup(String command) {
-        // ToDo make sure this works
         String[] groups = changeCommands.get(command).toString().split(",");
         String newGroup = groups[1];
+        System.out.print("NewGroup= "+newGroup);
         if (newGroup==null){
-            log.warning(logName+"There is no group for command:"+command);
+            log.warning(logName+"There is no NewGroup for command:"+command);
         }
         return newGroup;
     }

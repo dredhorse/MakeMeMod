@@ -25,16 +25,15 @@ public class PlayerListenerMMM extends PlayerListener{
         String[] args = event.getMessage().split(" ");
         String command = args[0].substring(1);
         String msg ="";
-        System.out.print("pl"+command);
         if(!plugin.isValid(command)) return;
         Player player = event.getPlayer();
         event.setCancelled(true);
         if (player.hasPermission("mmm.command."+command)){
             String oldGroup = plugin.getOldGroup(command);
             String newGroup = plugin.getNewGroup(command);
-            if ((oldGroup==null && newGroup==null)) {
+            if ((oldGroup==null || newGroup==null)) {
                 msg = "Configuration error for command: "+command;
-                plugin.sendMessage(msg, player);
+                player.sendMessage(msg);
                 return;
             }
             String world = player.getWorld().getName();

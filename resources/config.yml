@@ -17,6 +17,9 @@ broadcast-targets:
 - 'Admin'
 - 'Moderators'
 
+# General Permission changes or world specific?
+general-perm-changes: 'false'
+
 # ----- Group Change Commands
 #
 # Customize Group Change Commands in form of
@@ -24,5 +27,5 @@ broadcast-targets:
 #
 alias-list:
     mod: Builder,Moderators
-    admin: Moderators,Admins
+    admin: Builder,Admins
     

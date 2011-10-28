@@ -46,17 +46,13 @@ public class CommandMMM implements CommandExecutor {
                     cmd = args[0];
                     System.out.print("well "+cmd);
                     System.out.print(player.getName());
-                    if (player.hasPermission("mmm.command.engi")){
+                    if (player.hasPermission("mmm.command."+cmd)){
                         System.out.print("hmm"+plugin.isValid(cmd));
                         if (plugin.isValid(cmd)){
                             String newGroup = plugin.getNewGroup(cmd);
                             String oldGroup = plugin.getOldGroup(cmd);
                             String world = player.getWorld().getName();
-                            if (!plugin.changeBack(player))
-                            {
-                                msg = plugin.executeChange(player, oldGroup, newGroup, world);
-                            }
-
+                            msg = plugin.executeChange(player, oldGroup, newGroup, world);
                         }else{
                             msg = plugin.logName + "there is no config for: "+cmd;
                         }
