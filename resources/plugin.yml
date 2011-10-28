@@ -5,16 +5,16 @@ author: DonRedhorse
 commands:
     mmm:
         description: Used as fallback for aliases or to issue reload command
-        permission: MMM.command
+        permission: mmm.command
         usage: /<command> [Alias|reload]
 permissions:
-    MMM.*:
+    mmm.*:
         description: Gives access to all MakeMeMod commands
         children:
-            MMM.reload: true
-    MMM.reload:
+            mmm.reload: true
+    mmm.reload:
         description: Allows reloading of MakeMeMod config
         default: OP
-    MMM.command:
+    mmm.command:
         description: Allows executing of MMM command
         default: OP

@@ -1,8 +1,8 @@
 package org.simiancage.bukkit.makememod;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
@@ -29,10 +29,10 @@ public class MakeMeMod extends JavaPlugin{
     private String configVersion = "1.0"; // Internal Configversion
     protected String configVer; // ConfigVersion from Config File
     protected boolean broadcastAll = true; // Broadcast group changes to all players
-    protected boolean broadcastGroup = false; // Broadcast to specific groups
-    protected ArrayList<String> broadcastTargets = new ArrayList<String>();
-    protected Map<String, Object> changeCommands;
-
+    protected boolean broadcastGroups = false; // Broadcast to specific groups
+    protected ArrayList<String> broadcastTargets = new ArrayList<String>(); // List of groups to send messages to
+    protected Map<String, Object> changeCommands; // Alias and group changes
+    public boolean debug = false; // Debug Mode
 
     ServerListenerMMM serverListener = new ServerListenerMMM(this);
     PlayerListenerMMM playerListener = new PlayerListenerMMM(this);
@@ -50,6 +50,7 @@ public class MakeMeMod extends JavaPlugin{
     MakeMeMod plugin = this;
     protected boolean generalPermChanges;
 
+
     public enum PERM_SYS {PEX,BPER,SUPPERM}
 
     protected PERM_SYS permUsed;
@@ -59,7 +60,6 @@ public class MakeMeMod extends JavaPlugin{
 
     public void onEnable() {
 
-        // CommandMMM commandMMM = new CommandMMM(this);
         log = Bukkit.getServer().getLogger();
         pluginName = getDescription().getName();
         logName = "[" + pluginName + "] ";
@@ -79,6 +79,7 @@ public class MakeMeMod extends JavaPlugin{
             log.warning(logName + "Your config file is out of date! Rename your config and reload to see the new options.");
             log.warning(logName + "Using set options from config file and defaults for new options...");
         }
+        if (debug) log.info(logName+"Debug Logging is enabled!");
         log.info(logName+"v"+pluginVersion+" is enabled");
     }
 
@@ -96,51 +97,60 @@ public class MakeMeMod extends JavaPlugin{
 
     }
 
-    boolean changeGroup (Player player, String oldGroup, String newGroup, String world) {
+
+    String changeGroup (Player player, String oldGroup, String newGroup, String world) {
         boolean changedGroup = false;
-        if (usingPerm)
+        String msg;
+        if (usingPerm && (!(oldGroup.isEmpty() || newGroup.isEmpty())))
         {
             switch (permUsed){
                 case PEX: {
                     PermissionUser user = pexPlugin.getUser(player);
-
+                    boolean isUpgrade =false;
                     // Check if we are upgrading = player is still in the oldGroup
-                    boolean isUpgrade = user.inGroup(oldGroup);
-                    System.out.print(isUpgrade);
+                    if (generalPermChanges)
+                    {
+                        isUpgrade = user.inGroup(oldGroup, false);
+                    } else {
+                        isUpgrade = user.inGroup(oldGroup, world, false);
+                    }
                     if (!isUpgrade)
                     // We are going back to the oldGroup
                     {
                         String t = oldGroup;
-                        System.out.print(t);
                         oldGroup = newGroup;
-                        System.out.print(oldGroup);
                         newGroup = t;
-                        System.out.print(newGroup);
                     }
                     if (generalPermChanges)
                     {
-                        user.removeGroup(oldGroup,world);
-                        user.addGroup(newGroup,world);
-                    } else {
                         user.removeGroup(oldGroup);
                         user.addGroup(newGroup);
+                    } else {
+                        user.removeGroup(oldGroup,world);
+                        user.addGroup(newGroup,world);
                     }
                     changedGroup= true;
                 }
 
             }
         }
-        return changedGroup;
+        if (changedGroup){
+            msg = "Successfully changed "+ ChatColor.BLUE+player.getName()+ChatColor.WHITE +" to group "+ ChatColor.RED +newGroup+ ChatColor.WHITE + " in world "+ ChatColor.GREEN +world;
+        } else {
+            msg = "There was a problem with changing "+ChatColor.BLUE +player.getName();
+        }
+
+        return msg;
     }
 
 
     void sendMessage (String msg, Player player) {
         // ToDo condense it more, look for console sender and also enable logging
         if (!(player==null)){
-            if ((!broadcastAll && broadcastGroup && usingPerm)) {
+            if ((!broadcastAll && broadcastGroups && usingPerm)) {
                 for (String groups: broadcastTargets) {
                     for (Player allPlayers: getServer().getOnlinePlayers()){
-                        String world = getServer().getPlayer(allPlayers.toString()).getWorld().getName();
+                        String world = allPlayers.getWorld().getName();
                         switch (permUsed){
                             case PEX: {
 
@@ -149,10 +159,7 @@ public class MakeMeMod extends JavaPlugin{
                                     allPlayers.sendMessage(msg);
                                 }
                             }
-                            default:
-                            {
-                                // Nothing realy
-                            }
+
                         }
                     }
                 }
@@ -168,15 +175,7 @@ public class MakeMeMod extends JavaPlugin{
         }
     }
 
-    String executeChange(Player player, String oldGroup, String newGroup, String world) {
-        String msg;
-        if (changeGroup(player, oldGroup, newGroup, world)){
-            msg = "Successfully changed "+player.getName()+" to group "+newGroup+" in world "+world;
-        } else {
-            msg = "Unsuccessfully changed "+player.getName()+" to group "+newGroup+" in world "+world;
-        }
-        return msg;
-    }
+
 
 
 
@@ -187,23 +186,31 @@ public class MakeMeMod extends JavaPlugin{
 
     public String getOldGroup(String command) {
         String[] groups = changeCommands.get(command).toString().split(",");
-        String oldGroup = groups[0];
-        System.out.print("oldGroup= "+oldGroup);
-        if (oldGroup==null){
-            log.warning(logName+"There is no OldGroup for command:"+command);
+        String oldGroup = "";
+        if (groups.length<2){
+            log.warning(logName+"There is no correct configuration for command: "+command);
+        } else {
+        oldGroup = groups[0];
         }
         return oldGroup;
     }
 
     public String getNewGroup(String command) {
         String[] groups = changeCommands.get(command).toString().split(",");
-        String newGroup = groups[1];
-        System.out.print("NewGroup= "+newGroup);
-        if (newGroup==null){
-            log.warning(logName+"There is no NewGroup for command:"+command);
+        String newGroup = "";
+        if (groups.length<2){
+            log.warning(logName+"There is no correct configuration for command: "+command);
+        } else {
+            newGroup = groups[1];
         }
         return newGroup;
     }
 
+    private void logToConsole(String varName, Object logToConsole) {
+        if (plugin.debug)
+        {
+            plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
+        }
+    }
 }
 

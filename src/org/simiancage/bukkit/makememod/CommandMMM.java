@@ -42,17 +42,13 @@ public class CommandMMM implements CommandExecutor {
                     plugin.sendMessage(msg, player);
                     return true;
                 } else {
-
                     cmd = args[0];
-                    System.out.print("well "+cmd);
-                    System.out.print(player.getName());
                     if (player.hasPermission("mmm.command."+cmd)){
-                        System.out.print("hmm"+plugin.isValid(cmd));
                         if (plugin.isValid(cmd)){
                             String newGroup = plugin.getNewGroup(cmd);
                             String oldGroup = plugin.getOldGroup(cmd);
                             String world = player.getWorld().getName();
-                            msg = plugin.executeChange(player, oldGroup, newGroup, world);
+                            msg = plugin.changeGroup(player, oldGroup, newGroup, world);
                         }else{
                             msg = plugin.logName + "there is no config for: "+cmd;
                         }
@@ -76,6 +72,11 @@ public class CommandMMM implements CommandExecutor {
         return false;
     }
 
-
+    private void logToConsole(String varName, Object logToConsole) {
+        if (plugin.debug)
+        {
+        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
+        }
+    }
 }
 

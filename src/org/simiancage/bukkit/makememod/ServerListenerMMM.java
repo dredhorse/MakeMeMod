@@ -48,5 +48,12 @@ public class ServerListenerMMM extends ServerListener{
 
         }
     }
-}
+
+    private void logToConsole(String varName, Object logToConsole) {
+        if (plugin.debug)
+        {
+        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
+        }
+    }
+ }
 

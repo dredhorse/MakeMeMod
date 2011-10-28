@@ -37,14 +37,21 @@ public class PlayerListenerMMM extends PlayerListener{
                 return;
             }
             String world = player.getWorld().getName();
-            
-            msg = plugin.executeChange(player, oldGroup, newGroup, world);
+
+            msg = plugin.changeGroup(player, oldGroup, newGroup, world);
 
 
         } else {
             msg = "You don't have the permission mmm.command."+command+"!";
         }
         plugin.sendMessage(msg, player);
+    }
+
+    private void logToConsole(String varName, Object logToConsole) {
+        if (plugin.debug)
+        {
+        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
+        }
     }
 
 

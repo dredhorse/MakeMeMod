@@ -7,10 +7,10 @@ configVer: '1.0'
 # ----- Standard plugin features
 
 # Broadcast group changes to all players
-broadcast-all: 'true'
+broadcast-all: true
 
 # Broadcast group changes to specific groups
-broadcast-group: 'false'
+broadcast-groups: false
 
 # Groups to broadcast to
 broadcast-targets:
@@ -18,7 +18,14 @@ broadcast-targets:
 - 'Moderators'
 
 # General Permission changes or world specific?
-general-perm-changes: 'false'
+general-perm-changes: false
+
+# ----- Debugging
+#
+# enable debugging to console
+
+debug: false
+
 
 # ----- Group Change Commands
 #

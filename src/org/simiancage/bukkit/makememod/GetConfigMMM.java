@@ -55,20 +55,36 @@ public class GetConfigMMM {
         }
     }
 
+    @SuppressWarnings(value = "unchecked")
     static void GetConfig() {
         configuration = plugin.getConfig();
+        configuration.addDefault("debug", plugin.debug);
         configuration.addDefault("broadcast-all", plugin.broadcastAll);
-        configuration.addDefault("broadcast-group", plugin.broadcastGroup);
+        configuration.addDefault("broadcast-groups", plugin.broadcastGroups);
         configuration.addDefault("broadcast-targets", plugin.broadcastTargets);
         configuration.addDefault("general-perm-changes", plugin.generalPermChanges);
+        plugin.debug=configuration.getBoolean("debug");
+        logToConsole("debug",plugin.debug);
         plugin.configVer=configuration.getString("configVer");
+        logToConsole("configVer",plugin.configVer);
         plugin.broadcastAll=configuration.getBoolean("broadcast-all");
-        plugin.broadcastGroup=configuration.getBoolean("broadcast-groups");
+        logToConsole("broadcast-all",plugin.broadcastAll);
+        plugin.broadcastGroups =configuration.getBoolean("broadcast-groups");
+        logToConsole("broadcast-groups",plugin.broadcastGroups);
         plugin.broadcastTargets=(ArrayList<String>) configuration.getList("broadcast-targets");
+        logToConsole("broadcast-targets",plugin.broadcastTargets);
         plugin.generalPermChanges=configuration.getBoolean("general-perm-changes");
+        logToConsole("general-perm-changes",plugin.generalPermChanges);
         plugin.changeCommands=configuration.getConfigurationSection("alias-list").getValues(true);
+        logToConsole("alias-list",plugin.changeCommands);
     }
 
+    private static void logToConsole(String varName, Object logToConsole) {
+        if (plugin.debug)
+        {
+        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
+        }
+    }
 
 
 }
