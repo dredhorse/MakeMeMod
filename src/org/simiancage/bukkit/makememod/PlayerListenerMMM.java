@@ -14,10 +14,13 @@ import org.bukkit.event.player.PlayerListener;
 
 public class PlayerListenerMMM extends PlayerListener{
 
+    ConfigMMM config  = ConfigMMM.getInstance();
     private MakeMeMod plugin;
+    LoggerMMM log;
 
     public PlayerListenerMMM (MakeMeMod plugin) {
         this.plugin = plugin;
+        log = MakeMeMod.log;
     }
 
     @Override
@@ -25,12 +28,12 @@ public class PlayerListenerMMM extends PlayerListener{
         String[] args = event.getMessage().split(" ");
         String command = args[0].substring(1);
         String msg ="";
-        if(!plugin.isValid(command)) return;
+        if(!config.isValid(command)) return;
         Player player = event.getPlayer();
         event.setCancelled(true);
         if (player.hasPermission("mmm.command."+command)){
-            String oldGroup = plugin.getOldGroup(command);
-            String newGroup = plugin.getNewGroup(command);
+            String oldGroup = config.getOldGroup(command);
+            String newGroup = config.getNewGroup(command);
             if ((oldGroup==null || newGroup==null)) {
                 msg = "Configuration error for command: "+command;
                 player.sendMessage(msg);
@@ -47,12 +50,7 @@ public class PlayerListenerMMM extends PlayerListener{
         plugin.sendMessage(msg, player);
     }
 
-    private void logToConsole(String varName, Object logToConsole) {
-        if (plugin.debug)
-        {
-        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
-        }
-    }
+
 
 
 }

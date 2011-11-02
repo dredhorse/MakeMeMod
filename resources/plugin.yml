@@ -1,6 +1,6 @@
 name: MakeMeMod
 main: org.simiancage.bukkit.makememod.MakeMeMod
-version: 0.1
+version: 0.2
 author: DonRedhorse
 commands:
     mmm:
@@ -12,9 +12,10 @@ permissions:
         description: Gives access to all MakeMeMod commands
         children:
             mmm.reload: true
+            mmm.command: true
     mmm.reload:
         description: Allows reloading of MakeMeMod config
         default: OP
     mmm.command:
-        description: Allows executing of MMM command
+        description: Allows executing of ConfigMMM command
         default: OP

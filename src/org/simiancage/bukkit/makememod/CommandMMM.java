@@ -3,7 +3,6 @@ package org.simiancage.bukkit.makememod;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 /**
@@ -17,12 +16,14 @@ import org.bukkit.entity.Player;
 public class CommandMMM implements CommandExecutor {
 
     private static MakeMeMod plugin;
-    private static Configuration configuration;
+    private static LoggerMMM log;
+    private static ConfigMMM config;
 
 
     public CommandMMM(MakeMeMod plugin) {
         this.plugin = plugin;
-        this.configuration = plugin.configuration;
+        log = MakeMeMod.log;
+        config = ConfigMMM.getInstance();
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -36,17 +37,16 @@ public class CommandMMM implements CommandExecutor {
 
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("reload")){
-                    plugin.reloadConfig();
-                    GetConfigMMM.GetConfig();
+                    config.reloadConfig();
                     msg = plugin.logName + "reloaded config!";
                     plugin.sendMessage(msg, player);
                     return true;
                 } else {
                     cmd = args[0];
                     if (player.hasPermission("mmm.command."+cmd)){
-                        if (plugin.isValid(cmd)){
-                            String newGroup = plugin.getNewGroup(cmd);
-                            String oldGroup = plugin.getOldGroup(cmd);
+                        if (config.isValid(cmd)){
+                            String newGroup = config.getNewGroup(cmd);
+                            String oldGroup = config.getOldGroup(cmd);
                             String world = player.getWorld().getName();
                             msg = plugin.changeGroup(player, oldGroup, newGroup, world);
                         }else{
@@ -63,7 +63,7 @@ public class CommandMMM implements CommandExecutor {
                 if (!(player==null)){
                     player.sendMessage(msg);
                 } else {
-                    plugin.log.info(plugin.logName + "Try mmm reload or just let it be!");
+                    log.info("Try mmm reload or just let it be!");
                 }
             }
 
@@ -72,11 +72,5 @@ public class CommandMMM implements CommandExecutor {
         return false;
     }
 
-    private void logToConsole(String varName, Object logToConsole) {
-        if (plugin.debug)
-        {
-        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
-        }
-    }
 }
 

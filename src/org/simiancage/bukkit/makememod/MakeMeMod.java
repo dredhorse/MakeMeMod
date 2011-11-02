@@ -1,6 +1,5 @@
 package org.simiancage.bukkit.makememod;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -10,10 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 
-
 import java.io.File;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  * PluginName: MakeMeMod
@@ -25,20 +22,11 @@ import java.util.logging.Logger;
 
 public class MakeMeMod extends JavaPlugin{
 
-    // Configuration Options
-    private String configVersion = "1.0"; // Internal Configversion
-    protected String configVer; // ConfigVersion from Config File
-    protected boolean broadcastAll = true; // Broadcast group changes to all players
-    protected boolean broadcastGroups = false; // Broadcast to specific groups
-    protected ArrayList<String> broadcastTargets = new ArrayList<String>(); // List of groups to send messages to
-    protected Map<String, Object> changeCommands; // Alias and group changes
-    public boolean debug = false; // Debug Mode
-
     ServerListenerMMM serverListener = new ServerListenerMMM(this);
     PlayerListenerMMM playerListener = new PlayerListenerMMM(this);
-    GetConfigMMM getConfigMMM = new GetConfigMMM(this);
+    public static ConfigMMM config;
+    public static LoggerMMM log;
     boolean usingPerm;
-    protected Logger log;
     protected File configFile;
     protected String logName;
     protected String pluginName;
@@ -55,45 +43,41 @@ public class MakeMeMod extends JavaPlugin{
 
     protected PERM_SYS permUsed;
 
-
+    public static LoggerMMM getLog(){
+        return log;
+    }
 
 
     public void onEnable() {
 
-        log = Bukkit.getServer().getLogger();
+        log = new LoggerMMM(this);
+        System.out.print(log);
         pluginName = getDescription().getName();
         logName = "[" + pluginName + "] ";
         pluginVersion = getDescription().getVersion();
-        pluginAuthor = getDescription().getAuthors();
-        pluginPath = getDataFolder() + System.getProperty("file.separator");
-        configFile = new File(pluginPath+"config.yml");
-        GetConfigMMM.CheckDefaultConfig();
-        GetConfigMMM.GetConfig();
+        config  = ConfigMMM.getInstance();
+        config.setupConfig(configuration, plugin);
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
         addCommands();
-        if (!configVer.equals(configVersion))
-        {
-            log.warning(logName + "Your config file is out of date! Rename your config and reload to see the new options.");
-            log.warning(logName + "Using set options from config file and defaults for new options...");
-        }
-        if (debug) log.info(logName+"Debug Logging is enabled!");
-        log.info(logName+"v"+pluginVersion+" is enabled");
+        if (config.debugLogEnabled()) log.info("Debug Logging is enabled!");
+        log.enableMsg();
     }
 
 
     public void onDisable() {
-        log.info(logName + "Disabled");
-        GetConfigMMM getConfigMMM = null;
-        CommandMMM commandMMM = null;
+        log.disableMsg();
+        config = null;
+
     }
 
     //// Sub Methods
 
     private void addCommands() {
         getCommand("mmm").setExecutor(new CommandMMM(this));
+        log.debug("Commmands Enabled",getCommand("mmm") );
 
     }
 
@@ -106,14 +90,15 @@ public class MakeMeMod extends JavaPlugin{
             switch (permUsed){
                 case PEX: {
                     PermissionUser user = pexPlugin.getUser(player);
-                    boolean isUpgrade =false;
+                    boolean isUpgrade = false;
                     // Check if we are upgrading = player is still in the oldGroup
-                    if (generalPermChanges)
+                    if (config.generalPermChanges())
                     {
                         isUpgrade = user.inGroup(oldGroup, false);
                     } else {
                         isUpgrade = user.inGroup(oldGroup, world, false);
                     }
+                    log.debug("isUpgrade",isUpgrade );
                     if (!isUpgrade)
                     // We are going back to the oldGroup
                     {
@@ -121,7 +106,7 @@ public class MakeMeMod extends JavaPlugin{
                         oldGroup = newGroup;
                         newGroup = t;
                     }
-                    if (generalPermChanges)
+                    if (config.generalPermChanges())
                     {
                         user.removeGroup(oldGroup);
                         user.addGroup(newGroup);
@@ -139,7 +124,7 @@ public class MakeMeMod extends JavaPlugin{
         } else {
             msg = "There was a problem with changing "+ChatColor.BLUE +player.getName();
         }
-
+        log.debug("msg",msg );
         return msg;
     }
 
@@ -147,8 +132,8 @@ public class MakeMeMod extends JavaPlugin{
     void sendMessage (String msg, Player player) {
         // ToDo condense it more, look for console sender and also enable logging
         if (!(player==null)){
-            if ((!broadcastAll && broadcastGroups && usingPerm)) {
-                for (String groups: broadcastTargets) {
+            if ((!config.broadcastAll() && config.broadcastGroups() && usingPerm)) {
+                for (String groups: config.broadcastTargets()) {
                     for (Player allPlayers: getServer().getOnlinePlayers()){
                         String world = allPlayers.getWorld().getName();
                         switch (permUsed){
@@ -156,6 +141,7 @@ public class MakeMeMod extends JavaPlugin{
 
                                 if (pexPlugin.getUsers(groups,world).toString().contains(allPlayers.getName()))
                                 {
+                                    log.debug("allPlayers",msg );
                                     allPlayers.sendMessage(msg);
                                 }
                             }
@@ -164,52 +150,16 @@ public class MakeMeMod extends JavaPlugin{
                     }
                 }
             }
-            if (broadcastAll) {
+            if (config.broadcastAll()) {
                 getServer().broadcastMessage(msg);
+                log.debug("broadcastAll",msg );
 
             } else {
                 player.sendMessage(msg);
+                log.debug("player",msg );
             }
         } else {
             log.info(msg);
-        }
-    }
-
-
-
-
-
-    public Boolean isValid(String command)
-    {
-        return changeCommands.containsKey(command);
-    }
-
-    public String getOldGroup(String command) {
-        String[] groups = changeCommands.get(command).toString().split(",");
-        String oldGroup = "";
-        if (groups.length<2){
-            log.warning(logName+"There is no correct configuration for command: "+command);
-        } else {
-        oldGroup = groups[0];
-        }
-        return oldGroup;
-    }
-
-    public String getNewGroup(String command) {
-        String[] groups = changeCommands.get(command).toString().split(",");
-        String newGroup = "";
-        if (groups.length<2){
-            log.warning(logName+"There is no correct configuration for command: "+command);
-        } else {
-            newGroup = groups[1];
-        }
-        return newGroup;
-    }
-
-    private void logToConsole(String varName, Object logToConsole) {
-        if (plugin.debug)
-        {
-            plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
         }
     }
 }

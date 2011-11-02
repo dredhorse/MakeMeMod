@@ -17,10 +17,12 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class ServerListenerMMM extends ServerListener{
     private static MakeMeMod plugin;
+    private static LoggerMMM log;
 
 
     public ServerListenerMMM(MakeMeMod plugin) {
         this.plugin = plugin;
+        log = MakeMeMod.log;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ServerListenerMMM extends ServerListener{
             plugin.pexPlugin = PermissionsEx.getPermissionManager();
             plugin.usingPerm = true;
             plugin.permUsed = MakeMeMod.PERM_SYS.PEX;
-            plugin.log.info(plugin.logName + "is using PEX now.");
+            log.info(plugin.logName + "is using PEX now.");
         }
 
     }
@@ -44,16 +46,10 @@ public class ServerListenerMMM extends ServerListener{
         if (plugin.usingPerm && (pex == null))
         {
             plugin.usingPerm = false;
-            plugin.log.info(plugin.logName + "is not using PEX anymore.");
+            log.info(plugin.logName + "is not using PEX anymore.");
 
         }
     }
 
-    private void logToConsole(String varName, Object logToConsole) {
-        if (plugin.debug)
-        {
-        plugin.log.info(plugin.logName+varName+"= "+logToConsole.toString());
-        }
-    }
  }
 

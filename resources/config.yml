@@ -30,7 +30,7 @@ debug: false
 # ----- Group Change Commands
 #
 # Customize Group Change Commands in form of
-# command: GroupTheyAreIn,GroupTheyShouldBeIn
+# alias: GroupTheyAreIn,GroupTheyShouldBeIn
 #
 alias-list:
     mod: Builder,Moderators
