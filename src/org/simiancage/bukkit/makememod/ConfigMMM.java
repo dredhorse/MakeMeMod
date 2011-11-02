@@ -18,6 +18,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,7 +54,7 @@ public class ConfigMMM {
     private ArrayList<String> broadcastTargets = new ArrayList<String>();
     private boolean generalPermChanges = false;
     private Map<String, Object> aliasList;
-    private ArrayList<String> defaultAliasList = new ArrayList<String>();
+    private Map<String, Object> defaultAliasList = new HashMap<String, Object>();
     private ArrayList<String> defaultBroadcastTargets = new ArrayList<String>();
 
 
@@ -89,7 +91,7 @@ public class ConfigMMM {
             stream.println("#------- Default Configuration");
             stream.println();
             stream.println("# Configuration Version");
-            stream.println("configVer: " + configVer);
+            stream.println("configVer: '" + configVer+"'");
             stream.println();
             stream.println("# Error Log Enabled");
             stream.println("# Enable logging to server console");
@@ -122,8 +124,10 @@ public class ConfigMMM {
             stream.println();
             stream.println("# Groups to broadcast to");
             stream.println("broadcastTargets:");
+
             for (String groups: broadcastTargets) {
-                stream.println("- '"+groups+"'");
+
+                stream.println("- '" + groups + "'");
             }
             stream.println();
             stream.println("# Make changes to GroupMembership general or world based?");
@@ -136,19 +140,21 @@ public class ConfigMMM {
             stream.println("# Customize group change commands in form of");
             stream.println("# alias: GroupTheyAreIn,GroupTheyShouldBeIn");
             stream.println("aliasList:");
-            /*List<String> aliasKeys = new ArrayList<String>(aliasList.keySet());
+            List<String> aliasKeys = new ArrayList<String>(aliasList.keySet());
             for ( String alias : aliasKeys) {
                 stream.println("    "+alias+": "+aliasList.get(alias));
-            }*/
+            }
 
             stream.println();
 
             stream.close();
 
             success = true;
+
         } catch (FileNotFoundException e) {
-            logInfo("Error saving the " + configFile + ".");
+            logWarn("Error saving the " + configFile + ".");
         }
+        log.debug("DefaultConfig written",success );
         return success;
     }
 
@@ -156,9 +162,17 @@ public class ConfigMMM {
 // Configuring the Default options..
 
     private void defaultConfig() {
+
+        defaultBroadcastTargets.add("Admin");
+        defaultBroadcastTargets.add("Moderators");
+        defaultAliasList.put("mod", "Builder,Moderators");
+        defaultAliasList.put("admin", "Builder,Admins");
+        broadcastTargets  = defaultBroadcastTargets;
+        aliasList  = defaultAliasList;
         if (!writeConfig()) {
             logInfo("Using internal Defaults!");
         }
+        config = plugin.getConfig();
         config.addDefault("configVer", configVer);
         config.addDefault("errorLogEnabled", errorLogEnabled);
         config.addDefault("debugLogEnabled", debugLogEnabled);
@@ -168,10 +182,7 @@ public class ConfigMMM {
         config.addDefault("broadcastAll", broadcastAll);
         config.addDefault("broadcastGroups", broadcastGroups);
         config.addDefault("generalPermChanges",generalPermChanges);
-        defaultBroadcastTargets.add("Admin");
-        defaultBroadcastTargets.add("Moderators");
-        defaultAliasList.add("mod: Builder,Moderators");
-        defaultAliasList.add("admin: Builder,Admins");
+
         //config.addDefaults(); Default("aliasList", defaultAliasList);
     }
 
@@ -179,7 +190,7 @@ public class ConfigMMM {
 
     private void loadConfig() {
         config = plugin.getConfig();
-// Starting to update the default configuration
+        // Starting to update the default configuration
         configVer = config.getString("configVer");
         errorLogEnabled = config.getBoolean("errorLogEnabled");
         debugLogEnabled = config.getBoolean("debugLogEnabled");
@@ -330,20 +341,20 @@ public class ConfigMMM {
             }
             in.close();
             if (newVersion.equals(thisVersion)) {
-                logInfo(pluginName + "is up to date at version "
+                logInfo("is up to date at version "
                         + thisVersion + ".");
 
                 return;
             } else {
-                logWarn(pluginName + "is out of date!");
+                logWarn("is out of date!");
                 logWarn("This version: " + thisVersion + "; latest version: " + newVersion + ".");
                 return;
             }
         } catch (MalformedURLException ex) {
-            logWarn(pluginName + "Error accessing update URL.");
+            logWarn("Error accessing update URL.");
             return;
         } catch (IOException ex) {
-            logWarn(pluginName + "Error checking for update.");
+            logWarn("Error checking for update.");
             return;
         }
     }
@@ -380,21 +391,19 @@ public class ConfigMMM {
 
     private void logInfo(String message) {
         if (errorLogEnabled) {
-            System.out.print(log);
-            System.out.print(message);
             log.info(message);
         }
     }
 
     private void logWarn(String message) {
         if (errorLogEnabled) {
-            log.warning("[" + pluginName + "] " + message);
+            log.warning( message);
         }
     }
 
     private void logSevere(String message) {
         if (errorLogEnabled) {
-            log.severe("[" + pluginName + "] " + message);
+            log.severe(message);
         }
     }
 

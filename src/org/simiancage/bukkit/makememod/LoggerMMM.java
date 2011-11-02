@@ -75,11 +75,11 @@ public class LoggerMMM {
     }
 
     public void enableMsg() {
-        this.info("[" + this.pluginName + "] v" + this.version + " enabled");
+        this.info(" v" + this.version + " enabled");
     }
 
     public void disableMsg() {
-        this.info("[" + this.pluginName + "] v" + this.version + " disabled");
+        this.info(" v" + this.version + " disabled");
     }
 
 
