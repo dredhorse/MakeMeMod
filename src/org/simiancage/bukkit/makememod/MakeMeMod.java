@@ -51,7 +51,6 @@ public class MakeMeMod extends JavaPlugin{
     public void onEnable() {
 
         log = new LoggerMMM(this);
-        System.out.print(log);
         pluginName = getDescription().getName();
         logName = "[" + pluginName + "] ";
         pluginVersion = getDescription().getVersion();
@@ -62,7 +61,6 @@ public class MakeMeMod extends JavaPlugin{
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
         addCommands();
-        if (config.debugLogEnabled()) log.info("Debug Logging is enabled!");
         log.enableMsg();
     }
 

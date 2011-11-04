@@ -32,7 +32,7 @@ public class ConfigMMM {
     // ToDo Change the pluginSlug, versionURL and log for the Plugin!
     private final String pluginSlug = "http://dev.bukkit.org/server-mods/makememod/";
     private final String versionURL = "https://raw.github.com/dredhorse/MakeMeMod/master/resources/makememod.ver";
-    private LoggerMMM log;
+    private static LoggerMMM log;
 
     // ToDo Change the configCurrent if the config changes!
     private final String configCurrent = "1.1";
@@ -45,6 +45,7 @@ public class ConfigMMM {
     private boolean saveConfig = false;
     private String pluginName;
     private String pluginVersion;
+    private boolean configRequiresUpdate = false;
 
 // Default Config Variables start here!
 
@@ -62,10 +63,12 @@ public class ConfigMMM {
         if (instance == null) {
             instance = new ConfigMMM();
         }
+        log = MakeMeMod.getLog();
         return instance;
     }
 
     private ConfigMMM() {
+
     }
 
     private boolean writeConfig() {
@@ -192,8 +195,11 @@ public class ConfigMMM {
         config = plugin.getConfig();
         // Starting to update the default configuration
         configVer = config.getString("configVer");
+
         errorLogEnabled = config.getBoolean("errorLogEnabled");
+
         debugLogEnabled = config.getBoolean("debugLogEnabled");
+
         checkForUpdate = config.getBoolean("checkForUpdate");
         autoUpdateConfig = config.getBoolean("autoUpdateConfig");
         saveConfig = config.getBoolean("saveConfig");
@@ -203,12 +209,24 @@ public class ConfigMMM {
         broadcastTargets = (ArrayList<String>) config.getList("broadcastTargets", defaultBroadcastTargets );
         aliasList = config.getConfigurationSection("aliasList").getValues(true);
 
+        // Debug OutPut NOW!
+        if (debugLogEnabled) log.info("Debug Logging is enabled!");
+        log.debug("configVer",configVer );
+        log.debug("errorLogEnabled",errorLogEnabled );
+        log.debug("checkForUpdate",checkForUpdate );
+        log.debug("autoUpdateConfig",autoUpdateConfig );
+        log.debug("saveConfig",saveConfig );
+        log.debug("broadcastAll",broadcastAll );
+        log.debug("broadcastGroups",broadcastGroups );
+        log.debug("generalPermChanges",generalPermChanges);
+        log.debug("broadcastTargets",broadcastTargets );
+        log.debug("aliasList",aliasList );
+
         logInfo("Configuration v." + configVer + " loaded.");
     }
 
 
 // The plugin specific getters start here!
-// ToDo add them
 
     public boolean broadcastAll() {
         return broadcastAll;
@@ -298,6 +316,10 @@ public class ConfigMMM {
         return saveConfig;
     }
 
+    public boolean configRequiresUpdated() {
+        return configRequiresUpdate;
+    }
+
 // And the rest
 
 // Setting up the config
@@ -306,7 +328,7 @@ public class ConfigMMM {
 
         this.config = config;
         this.plugin = plugin;
-        this.log = MakeMeMod.getLog();
+       // this.log = MakeMeMod.getLog();
 // Checking if config file exists, if not create it
         if (!(new File(plugin.getDataFolder(), configFile)).exists()) {
             logInfo("Creating default configuration file");
@@ -314,6 +336,16 @@ public class ConfigMMM {
         }
 // Loading the config from file
         loadConfig();
+        if (configVer.equalsIgnoreCase(configCurrent))
+        {
+            logInfo("Config is up to date");
+        }  else {
+            logWarn("Config is not up to date!");
+            logWarn("Config File Version: "+configVer);
+            logWarn("Internal Config Version: "+configCurrent);
+            logWarn("It is suggested to update the config.yml!");
+            configRequiresUpdate = true;
+        }
 // If config file has new options update it if enabled
         if (autoUpdateConfig) {
             updateConfig();
@@ -362,6 +394,7 @@ public class ConfigMMM {
 // Updating the config
 
     private void updateConfig() {
+        if (configRequiresUpdate) configVer = configCurrent;
         if (writeConfig()) {
             logInfo("Configuration was updated with new default values.");
             logInfo("Please change them to your liking.");
