@@ -57,6 +57,7 @@ public class ConfigMMM {
     private Map<String, Object> aliasList;
     private Map<String, Object> defaultAliasList = new HashMap<String, Object>();
     private ArrayList<String> defaultBroadcastTargets = new ArrayList<String>();
+    private boolean preferVault = true;
 
 
     public static ConfigMMM getInstance() {
@@ -118,6 +119,9 @@ public class ConfigMMM {
             stream.println("saveConfig: " + saveConfig);
             stream.println();
             stream.println("#-------- Plugin Configuration");
+            stream.println();
+            stream.println("# Prefer Vault Plugin as permission handler");
+            stream.println("preferVault: " + preferVault);
             stream.println();
             stream.println("# Broadcast to all players on the server when MakeMeMod is used");
             stream.println("broadcastAll: " + broadcastAll);
@@ -182,6 +186,7 @@ public class ConfigMMM {
         config.addDefault("checkForUpdate", checkForUpdate);
         config.addDefault("autoUpdateConfig", autoUpdateConfig);
         config.addDefault("saveConfig", saveConfig);
+        config.addDefault("preferVault", preferVault);
         config.addDefault("broadcastAll", broadcastAll);
         config.addDefault("broadcastGroups", broadcastGroups);
         config.addDefault("generalPermChanges",generalPermChanges);
@@ -195,14 +200,12 @@ public class ConfigMMM {
         config = plugin.getConfig();
         // Starting to update the default configuration
         configVer = config.getString("configVer");
-
         errorLogEnabled = config.getBoolean("errorLogEnabled");
-
         debugLogEnabled = config.getBoolean("debugLogEnabled");
-
         checkForUpdate = config.getBoolean("checkForUpdate");
         autoUpdateConfig = config.getBoolean("autoUpdateConfig");
         saveConfig = config.getBoolean("saveConfig");
+        preferVault = config.getBoolean("preferVault");
         broadcastAll = config.getBoolean("broadcastAll");
         broadcastGroups = config.getBoolean("broadcastGroups");
         generalPermChanges = config.getBoolean("generalPermChanges");
@@ -211,11 +214,13 @@ public class ConfigMMM {
 
         // Debug OutPut NOW!
         if (debugLogEnabled) log.info("Debug Logging is enabled!");
+        log.debug("configCurrent", configCurrent);
         log.debug("configVer",configVer );
         log.debug("errorLogEnabled",errorLogEnabled );
         log.debug("checkForUpdate",checkForUpdate );
         log.debug("autoUpdateConfig",autoUpdateConfig );
         log.debug("saveConfig",saveConfig );
+        log.debug("preferVault",preferVault );
         log.debug("broadcastAll",broadcastAll );
         log.debug("broadcastGroups",broadcastGroups );
         log.debug("generalPermChanges",generalPermChanges);
@@ -227,6 +232,10 @@ public class ConfigMMM {
 
 
 // The plugin specific getters start here!
+
+    public boolean preferVault() {
+        return preferVault;
+    }
 
     public boolean broadcastAll() {
         return broadcastAll;
@@ -394,13 +403,16 @@ public class ConfigMMM {
 // Updating the config
 
     private void updateConfig() {
-        if (configRequiresUpdate) configVer = configCurrent;
+        if (configRequiresUpdate)
+        {
+            configVer = configCurrent;
         if (writeConfig()) {
             logInfo("Configuration was updated with new default values.");
             logInfo("Please change them to your liking.");
         } else {
             logWarn("Configuration file could not be auto updated.");
             logWarn("Please rename " + configFile + " and try again.");
+        }
         }
     }
 

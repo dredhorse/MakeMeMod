@@ -1,5 +1,6 @@
 package org.simiancage.bukkit.makememod;
 
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -22,8 +23,8 @@ import java.util.ArrayList;
 
 public class MakeMeMod extends JavaPlugin{
 
-    ServerListenerMMM serverListener = new ServerListenerMMM(this);
-    PlayerListenerMMM playerListener = new PlayerListenerMMM(this);
+    ServerListenerMMM serverListener; // = new ServerListenerMMM(this);
+    PlayerListenerMMM playerListener; // = new PlayerListenerMMM(this);
     public static ConfigMMM config;
     public static LoggerMMM log;
     boolean usingPerm;
@@ -36,12 +37,13 @@ public class MakeMeMod extends JavaPlugin{
     protected PermissionManager pexPlugin = null;
     protected FileConfiguration configuration;
     MakeMeMod plugin = this;
-    protected boolean generalPermChanges;
+    boolean usingVault;
+    Permission permission = null;
 
 
-    public enum PERM_SYS {PEX,BPER,SUPPERM}
+    public enum PERM_SYS {PEX,VAULT,NULL}
 
-    protected PERM_SYS permUsed;
+    PERM_SYS permUsed = PERM_SYS.NULL;
 
     public static LoggerMMM getLog(){
         return log;
@@ -57,6 +59,8 @@ public class MakeMeMod extends JavaPlugin{
         config  = ConfigMMM.getInstance();
         config.setupConfig(configuration, plugin);
         PluginManager pm = getServer().getPluginManager();
+        serverListener = new ServerListenerMMM(this);
+        playerListener = new PlayerListenerMMM(this);
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
@@ -85,6 +89,8 @@ public class MakeMeMod extends JavaPlugin{
         String msg;
         if (usingPerm && (!(oldGroup.isEmpty() || newGroup.isEmpty())))
         {
+            log.debug("permUsed",permUsed );
+            log.debug("generalPermChanges",config.generalPermChanges());
             switch (permUsed){
                 case PEX: {
                     PermissionUser user = pexPlugin.getUser(player);
@@ -113,6 +119,46 @@ public class MakeMeMod extends JavaPlugin{
                         user.addGroup(newGroup,world);
                     }
                     changedGroup= true;
+                    break;
+                }
+                case VAULT: {
+
+                     boolean isUpgrade = false;
+                    // Check if we are upgrading = player is still in the oldGroup
+                    if (config.generalPermChanges())
+                    {
+                        isUpgrade = permission.playerInGroup(player, oldGroup);
+                    } else {
+                        log.debug("world",world );
+                        log.debug("player",player.getName());
+                        isUpgrade = permission.playerInGroup(world, player.getName(),oldGroup);
+                    }
+                    log.debug("isUpgrade",isUpgrade);
+                    if (!isUpgrade)
+                    {
+                        String t = oldGroup;
+                        oldGroup = newGroup;
+                        newGroup = t;
+                        log.debug("oldGroup", oldGroup );
+                        log.debug("newGroup", newGroup );
+                    }
+                    if (config.generalPermChanges())
+                    {
+                        boolean t;
+                        log.debug("generalPermChanges",config.generalPermChanges() );
+                        t = permission.playerRemoveGroup(player, oldGroup);
+                        log.debug("removeGroup",t);
+                        t = permission.playerAddGroup(player,newGroup);
+                        log.debug("addGroup",t);
+                    } else {
+                        boolean t;
+                        t = permission.playerRemoveGroup(world,player.getName(),oldGroup);
+                        log.debug("removeGroup",t );
+                        t = permission.playerAddGroup(world,player.getName(),newGroup);
+                        log.debug("addGroup",t);
+                    }
+                    changedGroup = true;
+                    break;
                 }
 
             }
@@ -127,10 +173,13 @@ public class MakeMeMod extends JavaPlugin{
     }
 
 
+
+
     void sendMessage (String msg, Player player) {
         // ToDo condense it more, look for console sender and also enable logging
         if (!(player==null)){
             if ((!config.broadcastAll() && config.broadcastGroups() && usingPerm)) {
+                log.debug("msg", msg);
                 for (String groups: config.broadcastTargets()) {
                     for (Player allPlayers: getServer().getOnlinePlayers()){
                         String world = allPlayers.getWorld().getName();
@@ -139,7 +188,14 @@ public class MakeMeMod extends JavaPlugin{
 
                                 if (pexPlugin.getUsers(groups,world).toString().contains(allPlayers.getName()))
                                 {
-                                    log.debug("allPlayers",msg );
+                                    log.debug("allPlayers",allPlayers );
+                                    allPlayers.sendMessage(msg);
+                                }
+                            }
+                            case VAULT: {
+                                if (permission.playerInGroup(allPlayers, groups))
+                                {
+                                    log.debug("allPlayers",allPlayers);
                                     allPlayers.sendMessage(msg);
                                 }
                             }

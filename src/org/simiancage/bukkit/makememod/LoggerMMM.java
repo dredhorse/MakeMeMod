@@ -47,7 +47,7 @@ public class LoggerMMM {
     }
 
     private String formatMessage(String message) {
-        return "[" + pluginName + "]: " + message;
+        return "[" + pluginName + "] " + message;
     }
 
     public void info(String msg) {

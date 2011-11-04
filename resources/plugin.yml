@@ -2,6 +2,8 @@ name: MakeMeMod
 main: org.simiancage.bukkit.makememod.MakeMeMod
 version: 0.2
 author: DonRedhorse
+description: Changing Groups back and forth
+softdepend: [PermissionsEx,Vault]
 commands:
     mmm:
         description: Used as fallback for aliases or to issue reload command
