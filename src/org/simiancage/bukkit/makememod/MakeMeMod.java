@@ -52,7 +52,7 @@ public class MakeMeMod extends JavaPlugin{
 
     public void onEnable() {
 
-        log = new LoggerMMM(this);
+        log = LoggerMMM.getInstance(this);
         pluginName = getDescription().getName();
         logName = "[" + pluginName + "] ";
         pluginVersion = getDescription().getVersion();

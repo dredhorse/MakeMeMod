@@ -20,19 +20,38 @@ public class LoggerMMM {
     private final Logger logger;
     private final String pluginName;
     private final String version;
+    private static LoggerMMM instance = null;
     private final ConfigMMM config = ConfigMMM.getInstance();
 
-    public void debug (String msg, Object object){
-        if (config.debugLogEnabled()) info(msg +"= ["+object.toString()+"]");
+    public static LoggerMMM getInstance(String loggerName, String pluginName){
+        if (instance == null) {
+            instance = new LoggerMMM(loggerName , pluginName);
+        }
+        return instance;
     }
 
-    public LoggerMMM(String loggerName, String pluginName) {
+    public static LoggerMMM getInstance(String pluginName){
+        if (instance == null) {
+            instance = new LoggerMMM( pluginName);
+        }
+        return instance;
+    }
+
+    public static LoggerMMM getInstance(Plugin pluginName){
+        if (instance == null) {
+            instance = new LoggerMMM( pluginName);
+        }
+        return instance;
+    }
+
+
+    private LoggerMMM(String loggerName, String pluginName) {
         this(Logger.getLogger(loggerName), pluginName, "");
     }
 
 
 
-    public LoggerMMM(String pluginName) {
+    private LoggerMMM(String pluginName) {
         this("Minecraft", pluginName);
     }
 
@@ -41,6 +60,13 @@ public class LoggerMMM {
         this.pluginName = pluginName;
         this.version = version;
     }
+
+
+    public void debug (String msg, Object object){
+        if (config.debugLogEnabled()) info(msg +"= ["+object.toString()+"]");
+    }
+
+
 
     public LoggerMMM(Plugin plugin) {
         this(plugin.getServer().getLogger(), plugin.getDescription().getName(), plugin.getDescription().getVersion());
