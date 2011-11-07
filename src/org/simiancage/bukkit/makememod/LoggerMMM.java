@@ -15,31 +15,32 @@ import org.bukkit.plugin.Plugin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings({"WeakerAccess", "UnusedDeclaration"})
 public class LoggerMMM {
 
     private final Logger logger;
     private final String pluginName;
     private final String version;
     private static LoggerMMM instance = null;
-    private final ConfigMMM config = ConfigMMM.getInstance();
+    private ConfigMMM config = ConfigMMM.getInstance();
 
-    public static LoggerMMM getInstance(String loggerName, String pluginName){
+    public static LoggerMMM getInstance(String loggerName, String pluginName) {
         if (instance == null) {
-            instance = new LoggerMMM(loggerName , pluginName);
+            instance = new LoggerMMM(loggerName, pluginName);
         }
         return instance;
     }
 
-    public static LoggerMMM getInstance(String pluginName){
+    public static LoggerMMM getInstance(String pluginName) {
         if (instance == null) {
-            instance = new LoggerMMM( pluginName);
+            instance = new LoggerMMM(pluginName);
         }
         return instance;
     }
 
-    public static LoggerMMM getInstance(Plugin pluginName){
+    public static LoggerMMM getInstance(Plugin pluginName) {
         if (instance == null) {
-            instance = new LoggerMMM( pluginName);
+            instance = new LoggerMMM(pluginName);
         }
         return instance;
     }
@@ -48,7 +49,6 @@ public class LoggerMMM {
     private LoggerMMM(String loggerName, String pluginName) {
         this(Logger.getLogger(loggerName), pluginName, "");
     }
-
 
 
     private LoggerMMM(String pluginName) {
@@ -61,23 +61,26 @@ public class LoggerMMM {
         this.version = version;
     }
 
-
-    public void debug (String msg, Object object){
-        if (config.debugLogEnabled()) info(msg +"= ["+object.toString()+"]");
-    }
-
-
-
     public LoggerMMM(Plugin plugin) {
         this(plugin.getServer().getLogger(), plugin.getDescription().getName(), plugin.getDescription().getVersion());
     }
+
+
+    public void debug(String msg, Object object) {
+        if (config.isDebugLogEnabled()) {
+            info(msg + "= [" + object.toString() + "]");
+        }
+    }
+
 
     private String formatMessage(String message) {
         return "[" + pluginName + "] " + message;
     }
 
     public void info(String msg) {
-        this.logger.info(this.formatMessage(msg));
+        if (config.isErrorLogEnabled()) {
+            this.logger.info(this.formatMessage(msg));
+        }
     }
 
     public void warning(String msg) {
@@ -106,6 +109,12 @@ public class LoggerMMM {
 
     public void disableMsg() {
         this.info("v" + this.version + " disabled");
+    }
+
+    public void error(String msg) {
+        if (config.isErrorLogEnabled()) {
+            this.info(msg);
+        }
     }
 
 

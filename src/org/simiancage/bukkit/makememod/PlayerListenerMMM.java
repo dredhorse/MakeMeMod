@@ -12,13 +12,13 @@ import org.bukkit.event.player.PlayerListener;
  * Time: 23:26
  */
 
-public class PlayerListenerMMM extends PlayerListener{
+public class PlayerListenerMMM extends PlayerListener {
 
-    ConfigMMM config  = ConfigMMM.getInstance();
+    private ConfigMMM config = ConfigMMM.getInstance();
     private MakeMeMod plugin;
-    LoggerMMM log;
+    private LoggerMMM log;
 
-    public PlayerListenerMMM (MakeMeMod plugin) {
+    public PlayerListenerMMM(MakeMeMod plugin) {
         this.plugin = plugin;
         log = MakeMeMod.log;
     }
@@ -27,15 +27,17 @@ public class PlayerListenerMMM extends PlayerListener{
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] args = event.getMessage().split(" ");
         String command = args[0].substring(1);
-        String msg ="";
-        if(!config.isValid(command)) return;
+        String msg;
+        if (!config.isValid(command)) {
+            return;
+        }
         Player player = event.getPlayer();
         event.setCancelled(true);
-        if (player.hasPermission("mmm.command."+command)){
+        if (player.hasPermission("mmm.command." + command)) {
             String oldGroup = config.getOldGroup(command);
             String newGroup = config.getNewGroup(command);
-            if ((oldGroup==null || newGroup==null)) {
-                msg = "Configuration error for command: "+command;
+            if ((oldGroup == null || newGroup == null)) {
+                msg = "Configuration error for command: " + command;
                 player.sendMessage(msg);
                 return;
             }
@@ -45,12 +47,10 @@ public class PlayerListenerMMM extends PlayerListener{
 
 
         } else {
-            msg = "You don't have the permission mmm.command."+command+"!";
+            msg = "You don't have the permission mmm.command." + command + "!";
         }
         plugin.sendMessage(msg, player);
     }
-
-
 
 
 }

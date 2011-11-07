@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@SuppressWarnings({"UnusedDeclaration"})
 public class ConfigMMM {
     private static ConfigMMM instance = null;
 
@@ -48,7 +49,9 @@ public class ConfigMMM {
 // Stuff with minor changes
 
     // ToDo Change the pluginSlug, versionURL and the LoggerClass  for the Plugin!
+    @SuppressWarnings({"FieldCanBeLocal"})
     private final String pluginSlug = "http://dev.bukkit.org/server-mods/makememod/";
+    @SuppressWarnings({"FieldCanBeLocal"})
     private final String versionURL = "https://raw.github.com/dredhorse/MakeMeMod/master/resources/makememod.ver";
     private static LoggerMMM log;
 
@@ -169,19 +172,19 @@ afterwards parsable again from the configuration class of bukkit
 
 // The plugin specific getters start here!
 
-    public boolean preferVault() {
+    public boolean isPreferVault() {
         return preferVault;
     }
 
-    public boolean broadcastAll() {
+    public boolean isBroadcastAll() {
         return broadcastAll;
     }
 
-    public boolean broadcastGroups() {
+    public boolean isBroadcastGroups() {
         return broadcastGroups;
     }
 
-    public boolean generalPermChanges() {
+    public boolean isGeneralPermChanges() {
         return generalPermChanges;
     }
 
@@ -205,7 +208,7 @@ afterwards parsable again from the configuration class of bukkit
         String[] groups = aliasList.get(alias).toString().split(",");
         String oldGroup = "";
         if (groups.length < 2) {
-            logWarn("There is no correct configuration for command: " + alias);
+            log.warning("There is no correct configuration for command: " + alias);
         } else {
             oldGroup = groups[0];
         }
@@ -217,7 +220,7 @@ afterwards parsable again from the configuration class of bukkit
         String[] groups = aliasList.get(alias).toString().split(",");
         String newGroup = "";
         if (groups.length < 2) {
-            logWarn("There is no correct configuration for command: " + alias);
+            log.warning("There is no correct configuration for command: " + alias);
         } else {
             newGroup = groups[1];
         }
@@ -259,27 +262,27 @@ afterwards parsable again from the configuration class of bukkit
         return configVer;
     }
 
-    public boolean errorLogEnabled() {
+    public boolean isErrorLogEnabled() {
         return errorLogEnabled;
     }
 
-    public boolean debugLogEnabled() {
+    public boolean isDebugLogEnabled() {
         return debugLogEnabled;
     }
 
-    public boolean checkForUpdate() {
+    public boolean isCheckForUpdate() {
         return checkForUpdate;
     }
 
-    public boolean autoUpdateConfig() {
+    public boolean isAutoUpdateConfig() {
         return autoUpdateConfig;
     }
 
-    public boolean saveConfig() {
+    public boolean isSaveConfig() {
         return saveConfig;
     }
 
-    public boolean configRequiresUpdate() {
+    public boolean isConfigRequiresUpdate() {
         return configRequiresUpdate;
     }
 
@@ -291,10 +294,9 @@ afterwards parsable again from the configuration class of bukkit
 
         this.config = config;
         this.plugin = plugin;
-        // this.log = MakeMeMod.getLog();
-// Checking if config file exists, if not create it
+  // Checking if config file exists, if not create it
         if (!(new File(plugin.getDataFolder(), configFile)).exists()) {
-            logInfo("Creating default configuration file");
+            log.info("Creating default configuration file");
             defaultConfig();
         }
 // Loading the config from file
@@ -322,7 +324,7 @@ afterwards parsable again from the configuration class of bukkit
     private void defaultConfig() {
         setupDefaultVariables();
         if (!writeConfig()) {
-            logInfo("Using internal Defaults!");
+            log.info("Using internal Defaults!");
         }
         config = plugin.getConfig();
         config.addDefault("configVer", configVer);
@@ -359,7 +361,7 @@ afterwards parsable again from the configuration class of bukkit
 
         loadCustomConfig();
 
-        logInfo("Configuration v." + configVer + " loaded.");
+        log.info("Configuration v." + configVer + " loaded.");
     }
 
 
@@ -368,7 +370,7 @@ afterwards parsable again from the configuration class of bukkit
     private boolean writeConfig() {
         boolean success = false;
         try {
-            PrintWriter stream = null;
+            PrintWriter stream;
             File folder = plugin.getDataFolder();
             if (folder != null) {
                 folder.mkdirs();
@@ -392,11 +394,12 @@ afterwards parsable again from the configuration class of bukkit
             stream.println();
             stream.println("# Error Log Enabled");
             stream.println("# Enable logging to server console");
+            stream.println("# Warning and Severe will still be logged.");
             stream.println("errorLogEnabled: " + errorLogEnabled);
             stream.println();
             stream.println("# Debug Log Enabled");
             stream.println("# Enable more logging.. could be messy!");
-            stream.println("debugLogEnabled: " + debugLogEnabled);
+            stream.println("DebugLogEnabled: " + debugLogEnabled);
             stream.println();
             stream.println("# Check for Update");
             stream.println("# Will check if there is a new version of the plugin out.");
@@ -422,7 +425,7 @@ afterwards parsable again from the configuration class of bukkit
             success = true;
 
         } catch (FileNotFoundException e) {
-            logWarn("Error saving the " + configFile + ".");
+            log.warning("Error saving the " + configFile + ".");
         }
         log.debug("DefaultConfig written", success);
         return success;
@@ -433,12 +436,12 @@ afterwards parsable again from the configuration class of bukkit
 
     private void updateNecessary() {
         if (configVer.equalsIgnoreCase(configCurrent)) {
-            logInfo("Config is up to date");
+            log.info("Config is up to date");
         } else {
-            logWarn("Config is not up to date!");
-            logWarn("Config File Version: " + configVer);
-            logWarn("Internal Config Version: " + configCurrent);
-            logWarn("It is suggested to update the config.yml!");
+            log.warning("Config is not up to date!");
+            log.warning("Config File Version: " + configVer);
+            log.warning("Internal Config Version: " + configCurrent);
+            log.warning("It is suggested to update the config.yml!");
             configRequiresUpdate = true;
         }
     }
@@ -447,10 +450,10 @@ afterwards parsable again from the configuration class of bukkit
 
     private void versionCheck() {
         String thisVersion = plugin.getDescription().getVersion();
-        URL url = null;
+        URL url;
         try {
             url = new URL(versionURL);
-            BufferedReader in = null;
+            BufferedReader in;
             in = new BufferedReader(new InputStreamReader(url.openStream()));
             String newVersion = "";
             String line;
@@ -459,21 +462,17 @@ afterwards parsable again from the configuration class of bukkit
             }
             in.close();
             if (newVersion.equals(thisVersion)) {
-                logInfo("is up to date at version "
+                log.info("is up to date at version "
                         + thisVersion + ".");
 
-                return;
             } else {
-                logWarn("is out of date!");
-                logWarn("This version: " + thisVersion + "; latest version: " + newVersion + ".");
-                return;
+                log.warning("is out of date!");
+                log.warning("This version: " + thisVersion + "; latest version: " + newVersion + ".");
             }
         } catch (MalformedURLException ex) {
-            logWarn("Error accessing update URL.");
-            return;
+            log.warning("Error accessing update URL.", ex);
         } catch (IOException ex) {
-            logWarn("Error checking for update.");
-            return;
+            log.warning("Error checking for update.", ex);
         }
     }
 
@@ -483,11 +482,11 @@ afterwards parsable again from the configuration class of bukkit
         if (configRequiresUpdate) {
             configVer = configCurrent;
             if (writeConfig()) {
-                logInfo("Configuration was updated with new default values.");
-                logInfo("Please change them to your liking.");
+                log.info("Configuration was updated with new default values.");
+                log.info("Please change them to your liking.");
             } else {
-                logWarn("Configuration file could not be auto updated.");
-                logWarn("Please rename " + configFile + " and try again.");
+                log.warning("Configuration file could not be auto updated.");
+                log.warning("Please rename " + configFile + " and try again.");
             }
         }
     }
@@ -498,34 +497,23 @@ afterwards parsable again from the configuration class of bukkit
         String msg;
         if (configAvailable) {
             loadConfig();
-            logInfo("Config reloaded");
+            log.info("Config reloaded");
             msg = "Config was reloaded";
         } else {
-            logSevere("Reloading Config before it exists.");
-            logSevere("Flog the developer!");
+            log.severe("Reloading Config before it exists.");
+            log.severe("Flog the developer!");
             msg = "Something terrible terrible did go really really wrong, see console log!";
         }
         return msg;
     }
+// Saving the config
 
-// Logging it..
-
-    private void logInfo(String message) {
-        if (errorLogEnabled) {
-            log.info(message);
+    public boolean saveConfig(){
+        boolean saved = false;
+        if (saveConfig){
+            saved = writeConfig();
         }
-    }
-
-    private void logWarn(String message) {
-        if (errorLogEnabled) {
-            log.warning(message);
-        }
-    }
-
-    private void logSevere(String message) {
-        if (errorLogEnabled) {
-            log.severe(message);
-        }
+        return saved;
     }
 
 }

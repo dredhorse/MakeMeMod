@@ -18,13 +18,14 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
  * Time: 20:46
  */
 
-public class ServerListenerMMM extends ServerListener{
+public class ServerListenerMMM extends ServerListener {
     private static MakeMeMod plugin;
     private static LoggerMMM log;
+    @SuppressWarnings({"FieldCanBeLocal"})
     private static ConfigMMM config;
 
     public ServerListenerMMM(MakeMeMod plugin) {
-        this.plugin = plugin;
+        ServerListenerMMM.plugin = plugin;
 
     }
 
@@ -35,37 +36,36 @@ public class ServerListenerMMM extends ServerListener{
         PluginManager pm = plugin.getServer().getPluginManager();
         Plugin pex = pm.getPlugin("PermissionsEx");
         Plugin vault = pm.getPlugin("Vault");
-        if (!plugin.usingPerm && (pex != null))
-        {
+        if (!plugin.usingPerm && (pex != null)) {
             plugin.pexPlugin = PermissionsEx.getPermissionManager();
-            if (plugin.permUsed.equals(PERM_SYS.NULL) || (plugin.permUsed.equals(PERM_SYS.VAULT) && !config.preferVault()))
-            {
+            if (plugin.permUsed.equals(PERM_SYS.NULL) || (plugin.permUsed.equals(PERM_SYS.VAULT) && !config.isPreferVault())) {
                 plugin.usingPerm = true;
                 plugin.permUsed = PERM_SYS.PEX;
                 log.info("is using PEX now.");
             }
         }
 
-        if (!plugin.usingVault && (vault != null))
-        {
-            if ((plugin.permUsed.equals(PERM_SYS.PEX) && config.preferVault()) || plugin.permUsed.equals(PERM_SYS.NULL) )
-            {
+        if (!plugin.usingVault && (vault != null)) {
+            if ((plugin.permUsed.equals(PERM_SYS.PEX) && config.isPreferVault()) || plugin.permUsed.equals(PERM_SYS.NULL)) {
                 RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
                 if (permissionProvider != null) {
                     plugin.permission = permissionProvider.getProvider();
-                    if (!plugin.permission.getName().equalsIgnoreCase("superperms"))
-                    {
+                    if (!plugin.permission.getName().equalsIgnoreCase("superperms")) {
                         plugin.usingVault = true;
                         plugin.usingPerm = true;
                         plugin.permUsed = PERM_SYS.VAULT;
-                        log.info("found Vault with Permission Provider "+plugin.permission.getName());
+                        if (plugin.permission.getName().equalsIgnoreCase("bPermissions"))
+                        {
+                            plugin.permUsed = PERM_SYS.BPERM;
+                        }
+                        log.info("found Vault with Permission Provider " + plugin.permission.getName());
                         log.info("is using Vault now.");
                     } else {
                         log.warning("found Vault with SuperPerms only!");
                         log.warning("Can't provide group changing!");
                         log.warning("not using Vault!");
                     }
-                }  else {
+                } else {
                     log.warning("found Vault without a Permission Provider!");
                     log.warning("not using Vault!");
                 }
@@ -80,14 +80,13 @@ public class ServerListenerMMM extends ServerListener{
         PluginManager pm = plugin.getServer().getPluginManager();
         Plugin pex = pm.getPlugin("PermissionsEx");
         Plugin vault = pm.getPlugin("Vault");
-        if (plugin.usingPerm && (pex == null))
-        {
+        if (plugin.usingPerm && (pex == null)) {
             plugin.usingPerm = false;
             plugin.permUsed = PERM_SYS.NULL;
             log.warning("is not using PEX anymore.");
 
         }
-        if (plugin.usingVault && (vault == null)){
+        if (plugin.usingVault && (vault == null)) {
             plugin.permUsed = PERM_SYS.NULL;
             plugin.usingPerm = false;
             log.warning("is not using Vault anymore.");

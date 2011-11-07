@@ -1,6 +1,6 @@
 name: MakeMeMod
 main: org.simiancage.bukkit.makememod.MakeMeMod
-version: 0.2
+version: 1.0
 author: DonRedhorse
 description: Changing Groups back and forth
 softdepend: [PermissionsEx,Vault]
