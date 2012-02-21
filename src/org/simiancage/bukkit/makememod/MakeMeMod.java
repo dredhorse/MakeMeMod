@@ -9,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 
+import java.io.IOException;
+
 /**
  * PluginName: MakeMeMod
  * Class: MakeMeMod
@@ -54,10 +56,20 @@ public class MakeMeMod extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         serverListener = new ServerListenerMMM(this);
         playerListener = new PlayerListenerMMM(this);
-        pm.registerEvents(serverListener,  this);
+        pm.registerEvents(serverListener, this);
         pm.registerEvents(playerListener, this);
         addCommands();
         log.enableMsg();
+
+	    try {
+	        // create a new metrics object
+	        Metrics metrics = new Metrics();
+
+	        // 'this' in this context is the Plugin object
+	        metrics.beginMeasuringPlugin(this);
+	    } catch (IOException e) {
+	        // Failed to submit the stats :-(
+	    }
     }
 
 
