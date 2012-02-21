@@ -4,7 +4,6 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.tehkode.permissions.PermissionManager;
@@ -55,9 +54,8 @@ public class MakeMeMod extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         serverListener = new ServerListenerMMM(this);
         playerListener = new PlayerListenerMMM(this);
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Event.Priority.Normal, this);
+        pm.registerEvents(serverListener,  this);
+        pm.registerEvents(playerListener, this);
         addCommands();
         log.enableMsg();
     }
@@ -220,6 +218,12 @@ public class MakeMeMod extends JavaPlugin {
                                     log.debug("allPlayers", allPlayers);
                                     allPlayers.sendMessage(msg);
                                 }
+                            }
+                            case BPERM: {
+	                            if (permission.playerInGroup(allPlayers, groups)){
+		                            log.debug("allPlayers", allPlayers);
+		                            allPlayers.sendMessage(msg);
+	                            }
                             }
 
                         }

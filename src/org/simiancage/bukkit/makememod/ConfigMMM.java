@@ -116,7 +116,7 @@ afterwards parsable again from the configuration class of bukkit
         broadcastAll = config.getBoolean("broadcastAll");
         broadcastGroups = config.getBoolean("broadcastGroups");
         generalPermChanges = config.getBoolean("generalPermChanges");
-        broadcastTargets = (ArrayList<String>) config.getList("broadcastTargets", defaultBroadcastTargets);
+        broadcastTargets = (ArrayList<String>) config.getStringList("broadcastTargets");
         aliasList = config.getConfigurationSection("aliasList").getValues(true);
 
         // Don't forget the debugging

@@ -1,8 +1,9 @@
 package org.simiancage.bukkit.makememod;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
 
 /**
  * PluginName: MakeMeMod
@@ -12,7 +13,7 @@ import org.bukkit.event.player.PlayerListener;
  * Time: 23:26
  */
 
-public class PlayerListenerMMM extends PlayerListener {
+public class PlayerListenerMMM implements Listener {
 
     private ConfigMMM config = ConfigMMM.getInstance();
     private MakeMeMod plugin;
@@ -23,7 +24,7 @@ public class PlayerListenerMMM extends PlayerListener {
         log = MakeMeMod.log;
     }
 
-    @Override
+    @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] args = event.getMessage().split(" ");
         String command = args[0].substring(1);

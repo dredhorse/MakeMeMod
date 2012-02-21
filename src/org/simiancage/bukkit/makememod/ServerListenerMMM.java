@@ -1,9 +1,10 @@
 package org.simiancage.bukkit.makememod;
 
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -18,7 +19,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
  * Time: 20:46
  */
 
-public class ServerListenerMMM extends ServerListener {
+public class ServerListenerMMM implements Listener {
     private static MakeMeMod plugin;
     private static LoggerMMM log;
     @SuppressWarnings({"FieldCanBeLocal"})
@@ -29,7 +30,7 @@ public class ServerListenerMMM extends ServerListener {
 
     }
 
-    @Override
+    @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
         log = MakeMeMod.getLog();
         config = ConfigMMM.getInstance();
@@ -74,7 +75,7 @@ public class ServerListenerMMM extends ServerListener {
 
     }
 
-    @Override
+    @EventHandler
     public void onPluginDisable(PluginDisableEvent event) {
         log = MakeMeMod.getLog();
         PluginManager pm = plugin.getServer().getPluginManager();
