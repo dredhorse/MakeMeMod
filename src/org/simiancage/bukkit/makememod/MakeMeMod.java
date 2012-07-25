@@ -12,6 +12,7 @@ import ru.tehkode.permissions.PermissionUser;
 import java.io.IOException;
 
 /**
+ * Final Version for Bukkit
  * PluginName: MakeMeMod
  * Class: MakeMeMod
  * User: DonRedhorse
