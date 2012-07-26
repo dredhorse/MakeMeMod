@@ -1,0 +1,29 @@
+-classpath
+'C:/repos/MakeMeMod/target/classes;C:/repos/mavenrepos/org/spout/spoutapi/dev-SNAPSHOT/spoutapi-dev-SNAPSHOT.jar;C:/repos/mavenrepos/org/spout/vanilla/1.2.5-SNAPSHOT/vanilla-1.2.5-SNAPSHOT.jar;C:/repos/mavenrepos/org/spout/spout/dev-SNAPSHOT/spout-dev-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-package
+-sourcepath
+'C:/repos/MakeMeMod/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2012 <a href="https://twitter.com/spoutcascade">TeamCascade</a>. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'C:/repos/MakeMeMod/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'MakeMeMod 0.9.1000-B0 API'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' 'C:/repos/MakeMeMod/target/javadoc-bundle-options'
+-nohelp
+-noqualifier
+'all'
+-tag
+"todo:a:To Do:"
+-use
+-version
+-windowtitle
+'MakeMeMod 0.9.1000-B0 API'

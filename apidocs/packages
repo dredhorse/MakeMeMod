@@ -1,0 +1,11 @@
+team.cascade.spout.makememod.commands
+team.cascade.spout.makememod.config
+team.cascade.spout.makememod.events
+team.cascade.spout.makememod.exceptions
+team.cascade.spout.makememod.helper
+team.cascade.spout.makememod.helper.commands
+team.cascade.spout.makememod.helper.config
+team.cascade.spout.makememod.helper.file
+team.cascade.spout.makememod
+team.cascade.spout.makememod.messages
+team.cascade.spout.makememod.permissions

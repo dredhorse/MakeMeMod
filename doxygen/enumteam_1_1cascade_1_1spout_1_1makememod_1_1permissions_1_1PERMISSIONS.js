@@ -1,0 +1,25 @@
+var enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS =
+[
+    [ "PERMISSIONS", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a030ad960be956dcad1926bf2f48da2a0", null ],
+    [ "asPermission", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a044317d93fd58c76df89e3fef73d087e", null ],
+    [ "dumpPermissions", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#abcf4a677a0c6e1c0a4c59d4c996c9dd7", null ],
+    [ "getComment", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ae9a385ab92ca388f58fe0ea9ae6e67a5", null ],
+    [ "getRequireAll", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#adc1256aa673ca5c66e39fec61c3102be", null ],
+    [ "handle", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ad9d1821c5862a6c46273d868eff6e551", null ],
+    [ "has", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ab6d00014ad167892d0a6d655cbb996ee", null ],
+    [ "has", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a31fe9e6e7388bc97c4f44197a33c92ca", null ],
+    [ "requireAll", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a385724dd46505c9d12e05ffe9825f847", null ],
+    [ "setComment", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#aad59a86043537e96ddb38e79cc2a8024", null ],
+    [ "setRequireAll", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a48218cb5e49ea95b84829b6fd2d4851d", null ],
+    [ "toPermission", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ab622043f2d06e9cb7d7bd3b1517bc1d0", null ],
+    [ "toString", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#acd4b6e83ae17184068bd6761be9e7461", null ],
+    [ "value", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a6df437e2453011e86ca32fa2edd1ba88", null ],
+    [ "comment", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a72b60f619915487cb45d94e69ee89695", null ],
+    [ "MAKEMEMOD_ADMIN", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a4d0282a04faa1959b72719f5f164a51a", null ],
+    [ "MAKEMEMOD_CHANGE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a1a57acad331e2d0e65d43d2afb3776da", null ],
+    [ "MAKEMEMOD_USER", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ab6973a4997ca8b2c0ea45e84862a5890", null ],
+    [ "MAX_DEPTH_PERMISSIONS_SETS", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a59deb0655f21cf79f8eb70baaa275f2b", null ],
+    [ "permissionsSet", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a536dc317cfe6b7815d1dd98d8f52b4da", null ],
+    [ "requireAll", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#ab35ba9f68935fb106ad937d572311c8c", null ],
+    [ "starPerms", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1permissions_1_1PERMISSIONS.html#a42ac220ee176414aea48819580e828f8", null ]
+];

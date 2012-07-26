@@ -1,0 +1,7 @@
+var namespaceteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions =
+[
+    [ "ConfigNotAvailableException", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1ConfigNotAvailableException.html", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1ConfigNotAvailableException" ],
+    [ "ConfigNotInitializedException", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1ConfigNotInitializedException.html", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1ConfigNotInitializedException" ],
+    [ "NoPermissionException", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1NoPermissionException.html", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1NoPermissionException" ],
+    [ "WrongClassException", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1WrongClassException.html", "classteam_1_1cascade_1_1spout_1_1makememod_1_1exceptions_1_1WrongClassException" ]
+];

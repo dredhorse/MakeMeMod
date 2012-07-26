@@ -1,0 +1,25 @@
+var enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles =
+[
+    [ "toString", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a1bc94953b0d92d93d92beb17035fdd72", null ],
+    [ "BLACK", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a795bccdaa9844ee194928c8307c35af5", null ],
+    [ "BLUE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a2b55c2750cc5a71a64af909f1aeb4580", null ],
+    [ "BOLD", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#aa1c5352217e7bb7e1bcf469d61b3e87b", null ],
+    [ "BRIGHT_GREEN", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a4d49001d4fbebfe097c2bcdcaf9a614b", null ],
+    [ "CONCEAL", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#aee4ec020f67f683eaa2e13d41dcc0381", null ],
+    [ "CYAN", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#ae8519ddb4cca3f77ddcd882b7928c2bf", null ],
+    [ "DARK_BLUE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#ab862bd97b50964b90bea44e002fad012", null ],
+    [ "DARK_CYAN", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a4cda9e4a7eadea0cccb91b0efb64c9ec", null ],
+    [ "DARK_GRAY", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a6c5462ab7f8a9e23df57d76e41718516", null ],
+    [ "DARK_GREEN", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a31af3d9a25f961c12d4842c1050779bd", null ],
+    [ "DARK_RED", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a3d2b57cb030080108f1b6831af36ca67", null ],
+    [ "GOLD", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a3f3187e0213bdc0d12cafff766c7f67f", null ],
+    [ "GRAY", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a0e03b20ad88bd0190e7a26dfc21586c5", null ],
+    [ "ITALIC", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a5b04a73a85a50b9ab2a2e5dedb95a905", null ],
+    [ "PINK", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a1c6a194dad4722a6f8f5b73ebd5996fc", null ],
+    [ "PURPLE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a59ce13f87ba8f7416bf88cd92e345e38", null ],
+    [ "RED", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#ae3034c0a12f4cf608d4ec08651981a24", null ],
+    [ "STRIKE_THROUGH", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#ad8e457b5ccbaf5bd74d7a019bd871c9e", null ],
+    [ "UNDERLINE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#aa18a1a38559b5063b31be84f215b4c46", null ],
+    [ "WHITE", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a162997bb417da6aba550e6d5871afbaf", null ],
+    [ "YELLOW", "enumteam_1_1cascade_1_1spout_1_1makememod_1_1helper_1_1Chat__Styles.html#a733d3856c94f6aed75b78f03c3340e83", null ]
+];
