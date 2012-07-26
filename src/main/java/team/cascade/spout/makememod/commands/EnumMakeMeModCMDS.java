@@ -38,13 +38,13 @@ public class EnumMakeMeModCMDS {
      * @throws CommandException
      */
 
-    @EnumCommand(command = COMMANDS.HELPERCLASSES_HELP)
+    @EnumCommand(command = COMMANDS.MAKEMEMOD_HELP)
     public void help(CommandContext args, CommandSource source) throws CommandException {
         Messenger.sendHeader(source, plugin.getName());
-        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.HELPERCLASSES.getRootCommand() + " " + COMMANDS.HELPERCLASSES_HELP.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.HELPERCLASSES_HELP.getCmdDescription());
-        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.HELPERCLASSES.getRootCommand() + " " + COMMANDS.HELPERCLASSES_INFO.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.HELPERCLASSES_INFO.getCmdDescription());
-        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.HELPERCLASSES.getRootCommand() + " " + COMMANDS.HELPERCLASSES_RELOAD.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.HELPERCLASSES_RELOAD.getCmdDescription());
-        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.HELPERCLASSES.getRootCommand() + " " + COMMANDS.HELPERCLASSES_SAVE.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.HELPERCLASSES_SAVE.getCmdDescription());
+        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.MAKEMEMOD.getRootCommand() + " " + COMMANDS.MAKEMEMOD_HELP.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.MAKEMEMOD_HELP.getCmdDescription());
+        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.MAKEMEMOD.getRootCommand() + " " + COMMANDS.MAKEMEMOD_INFO.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.MAKEMEMOD_INFO.getCmdDescription());
+        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.MAKEMEMOD.getRootCommand() + " " + COMMANDS.MAKEMEMOD_RELOAD.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.MAKEMEMOD_RELOAD.getCmdDescription());
+        Messenger.send(source, Chat_Styles.BRIGHT_GREEN + "- " + Chat_Styles.CYAN + "/" + COMMANDS.MAKEMEMOD.getRootCommand() + " " + COMMANDS.MAKEMEMOD_SAVE.getChildCommand() + Chat_Styles.BRIGHT_GREEN + " : " + COMMANDS.MAKEMEMOD_SAVE.getCmdDescription());
     }
 
     /**
@@ -54,7 +54,7 @@ public class EnumMakeMeModCMDS {
      * @param source
      * @throws CommandException
      */
-    @EnumCommand(command = COMMANDS.HELPERCLASSES_INFO)
+    @EnumCommand(command = COMMANDS.MAKEMEMOD_INFO)
     public void info(CommandContext args, CommandSource source) throws CommandException {
         Messenger.sendHeader(source, plugin.getName());
         Messenger.send(source, Chat_Styles.BRIGHT_GREEN + plugin.getDescription().getName() + " " + plugin.getDescription().getVersion());
@@ -81,7 +81,7 @@ public class EnumMakeMeModCMDS {
      * @param source
      * @throws CommandException
      */
-    @EnumCommand(command = COMMANDS.HELPERCLASSES_RELOAD)
+    @EnumCommand(command = COMMANDS.MAKEMEMOD_RELOAD)
     public void reload(CommandContext args, CommandSource source) throws CommandException {
         Messenger.sendHeader(source, plugin.getName());
         Messenger.send(source, "Reloading config");
@@ -108,7 +108,7 @@ public class EnumMakeMeModCMDS {
      * @param source
      * @throws CommandException
      */
-    @EnumCommand(command = COMMANDS.HELPERCLASSES_SAVE)
+    @EnumCommand(command = COMMANDS.MAKEMEMOD_SAVE)
     public void save(CommandContext args, CommandSource source) throws CommandException {
         Messenger.sendHeader(source, plugin.getName());
         Messenger.send(source, "Saving config");

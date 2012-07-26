@@ -48,13 +48,13 @@ public enum PERMISSIONS {
 
 
     /**
-     * Example Permission HLP_CLS_TEST which will be turned into hlp.cls.test, </p>
-     * has a description of "Base permission for the HelperClass" and an RequireAll permissions of false
+     * Example Permission MAKEMEMOD_CHANGE which will be turned into makememod.change, </p>
+     * has a description of "Base permission for the Group changes" and an RequireAll permissions of false
      */
 
-    HLP_CLS_TEST("Base permission for the HelperClass", false),
-    HLP_CLS_USER("User permission", false, HLP_CLS_TEST),
-    HLP_CLS_ADMIN("Admin permission, will also be used for broadcasting messages to admins", false, HLP_CLS_TEST, HLP_CLS_USER);
+    MAKEMEMOD_CHANGE("Base permission for the Group changes", false),
+    MAKEMEMOD_USER("User permission", false, MAKEMEMOD_CHANGE),
+    MAKEMEMOD_ADMIN("Admin permission, will also be used for broadcasting messages to admins", false, MAKEMEMOD_CHANGE, MAKEMEMOD_USER);
 
 
     // NO CHANGES BELOW HERE!!!!!
@@ -190,7 +190,7 @@ public enum PERMISSIONS {
 
 
     /**
-     * Creates a permission node syntax out of the enum, eg HLP_CLS_USER => hlp.cls.user
+     * Creates a permission node syntax out of the enum, eg MAKEMEMOD_USER => hlp.cls.user
      * Replaces _ with . and converts the ENUM to lowercase.
      *
      * @param s string to convert to permission node syntax

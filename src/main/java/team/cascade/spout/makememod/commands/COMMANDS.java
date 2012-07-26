@@ -1,9 +1,8 @@
 package team.cascade.spout.makememod.commands;
 
-import team.cascade.spout.makememod.helper.Chat_Styles;
+import org.spout.api.plugin.CommonPlugin;
 import team.cascade.spout.makememod.helper.Logger;
 import team.cascade.spout.makememod.permissions.PERMISSIONS;
-import org.spout.api.plugin.CommonPlugin;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +39,6 @@ import java.util.List;
  * <br>
  * NOTE: Atm aliases, usage and description can not be changed after the commands are initialized.
  *
- * @todo you need to create one of those enums for every command and give the ENUM an unique name. Just take a look at the examples.
  */
 
 // todo figure out how to manage aliases on the fly
@@ -48,11 +46,11 @@ import java.util.List;
 public enum COMMANDS {
 
     // Keep the stuff below if you want to keep the default commands
-    HELPERCLASSES("helper", "reload, save, info or help", "Admin root command for the Plugin", PERMISSIONS.HLP_CLS_USER,0,0),
-    HELPERCLASSES_INFO("info", "info", "Information about the plugin", PERMISSIONS.HLP_CLS_USER,0,0),
-    HELPERCLASSES_HELP("help", "help", "Help / Usage information", PERMISSIONS.HLP_CLS_USER,0,0),
-    HELPERCLASSES_SAVE("save", "save", "Save any changes made to the config", PERMISSIONS.HLP_CLS_ADMIN,0,0),
-    HELPERCLASSES_RELOAD("reload", "reload", "Reload the configuration", PERMISSIONS.HLP_CLS_ADMIN,0,0);
+    MAKEMEMOD("mmm", "reload, save, info or help", "Admin root command for the Plugin", PERMISSIONS.MAKEMEMOD_USER,0,0),
+    MAKEMEMOD_INFO("info", "info", "Information about the plugin", PERMISSIONS.MAKEMEMOD_USER,0,0),
+    MAKEMEMOD_HELP("help", "help", "Help / Usage information", PERMISSIONS.MAKEMEMOD_USER,0,0),
+    MAKEMEMOD_SAVE("save", "save", "Save any changes made to the config", PERMISSIONS.MAKEMEMOD_ADMIN,0,0),
+    MAKEMEMOD_RELOAD("reload", "reload", "Reload the configuration", PERMISSIONS.MAKEMEMOD_ADMIN,0,0);
 
 
     // NO CHANGES BELOW HERE!!!!!
@@ -230,7 +228,7 @@ public enum COMMANDS {
 
 
     /**
-     * Turns commands into root and child commands, from HELPERCLASSES_HELP in HELPERCLASSES.HELP
+     * Turns commands into root and child commands, from MAKEMEMOD_HELP in MAKEMEMOD.HELP
      *
      * @return string with commands in node from
      */
@@ -240,7 +238,7 @@ public enum COMMANDS {
     }
 
     /**
-     * Turns commands into root and child commands, from HELPERCLASSES_HELP in HELPERCLASSES.HELP
+     * Turns commands into root and child commands, from MAKEMEMOD_HELP in MAKEMEMOD.HELP
      *
      * @param command
      * @return  string with commands in node from

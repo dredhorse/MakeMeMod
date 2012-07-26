@@ -2,6 +2,10 @@ package team.cascade.spout.makememod;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.spout.api.Engine;
+import org.spout.api.Spout;
+import org.spout.api.command.CommandRegistrationsFactory;
+import org.spout.api.plugin.CommonPlugin;
 import team.cascade.spout.makememod.commands.EnumMakeMeMod;
 import team.cascade.spout.makememod.config.CONFIG;
 import team.cascade.spout.makememod.exceptions.ConfigNotAvailableException;
@@ -15,16 +19,11 @@ import team.cascade.spout.makememod.helper.config.CommentConfiguration;
 import team.cascade.spout.makememod.helper.config.Configuration;
 import team.cascade.spout.makememod.helper.file.CommandsLoadAndSave;
 import team.cascade.spout.makememod.helper.file.MessagesLoadAndSave;
-import team.cascade.spout.makememod.permissions.PERMISSIONS;
-import org.spout.api.Engine;
-import org.spout.api.Spout;
-import org.spout.api.command.CommandRegistrationsFactory;
-import org.spout.api.plugin.CommonPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import static team.cascade.spout.makememod.helper.file.CommandsLoadAndSave.commandsInit;
 import static team.cascade.spout.makememod.helper.file.MessagesLoadAndSave.messageInit;
@@ -107,24 +106,23 @@ public class MakeMeMod extends CommonPlugin {
     @Override
     public void onEnable() {
 
-         /**
-         * Most of the following IS necessary... except of course the logging and it depends on what you need.
-         *
-         */
-
-        // creating the new configuration for this plugin
+         // creating the new configuration for this plugin
         configuration = new Configuration(this);
         Logger.info("Adding configuration not directly generated via the ENUMS");
 
-        /**
-         * From here onwards it is really up to you.. depending on what configuration options you integrated
-         */
 
-        // todo enter special configuration in here
-
-        /**
-         * OK, THIS is really needed now..
-         */
+        Map<String, Object> defaultAliasList = new HashMap<String, Object>();
+        ArrayList<String> defaultBroadcastTargets = new ArrayList<String>();
+        defaultBroadcastTargets.add("Admin");
+        defaultBroadcastTargets.add("Moderators");
+        defaultAliasList.put("mod", "Builder,Moderators");
+        defaultAliasList.put("admin", "Builder,Admins");
+        try {
+            CONFIG.BROADCAST_GROUP.setConfigOption(defaultBroadcastTargets);
+            CONFIG.COMMAND_PERMISSION_GROUP_MAPPING.setConfigOption(defaultAliasList);
+        } catch (WrongClassException e) {
+           Logger.debug("Uupsa",e);
+        }
 
         // lets initialize the config, which means if not there write the default to file and read it, otherwise just read it
         try {
@@ -134,13 +132,13 @@ public class MakeMeMod extends CommonPlugin {
         }
 
         /*
-         * Now let's read the translations for the messages in game
-         */
+                   * Now let's read the translations for the messages in game
+                   */
         messageInit(this);
 
         /*
-         * Now let's read the translations for the commands in game
-         */
+                   * Now let's read the translations for the commands in game
+                   */
         commandsInit(this);
 
         /**

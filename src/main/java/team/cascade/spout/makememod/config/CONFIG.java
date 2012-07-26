@@ -42,9 +42,14 @@ public enum CONFIG {
     CONFIG_AUTO_UPDATE("Should the configuration automatically be updated \n#   when there is a new version available?", true),
     CONFIG_AUTO_SAVE("Should we automatically save any changes issued by commands to disc?", true),
     CONFIG_LOG_ENABLED("Enable logging of the config.. this could be lot's of info", true),
-    CONFIG_END("End of Default Configuration"),
-    PLUGIN_START("Begin of Plugin Configuration\n");
+    CONFIG_END("End of Default Configuration\n"),
+	CONFIG_END_LINE("####################################################################\n"),
+    PLUGIN_START("Begin of Plugin Configuration\n"),
     // <<<====== from here on onwards it is all yours don't forget tor replace the ; on top with a ,
+	BROADCAST_CHANGE_MESSAGE_TO_ALL("Broadcast a message that the permission group was changed to all players",true),
+	BROADCAST_CHANGE_MESSAGE_TO_GROUP("Broadcast a message that the permission group was changed to a group of players",false),
+	BROADCAST_GROUP("Broadcast a message to the following permission groups", new ArrayList<String>()),
+	COMMAND_PERMISSION_GROUP_MAPPING("Command to execute and the two groups which will be swapped", new HashMap<String, Object>());
 
 
 

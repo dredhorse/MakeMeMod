@@ -28,7 +28,7 @@ public class EnumMakeMeMod {
         plugin = instance;
     }
 
-    @EnumCommand(command = COMMANDS.HELPERCLASSES)
+    @EnumCommand(command = COMMANDS.MAKEMEMOD)
     @NestedCommand(EnumMakeMeModCMDS.class)
     public void helperClasses(CommandContext args, CommandSource source) throws CommandException {
     }

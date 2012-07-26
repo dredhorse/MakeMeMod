@@ -838,7 +838,7 @@ public abstract  class CommentConfiguration {
 
     /**
      * Auto Checker, which runs every 60 minutes to check for an update and announces it to
-     * PERMISSIONS.HLP_CLS_ADMIN users if an update is found.
+     * PERMISSIONS.MAKEMEMOD_ADMIN users if an update is found.
      * @see #versionCheck()
      */
 
@@ -1001,8 +1001,8 @@ public abstract  class CommentConfiguration {
 
                 Logger.warning("is out of date!");
                 Logger.warning("This version: " + pluginVersion + "; latest version: " + newVersion + ".");
-                Spout.getEngine().broadcastMessage("A new Version of " + pluginName + " is available!", PERMISSIONS.HLP_CLS_ADMIN.asPermission());
-                Spout.getEngine().broadcastMessage("Your Version: " + pluginVersion + " New Version: " + newVersion, PERMISSIONS.HLP_CLS_ADMIN.asPermission());
+                Spout.getEngine().broadcastMessage("A new Version of " + pluginName + " is available!", PERMISSIONS.MAKEMEMOD_ADMIN.asPermission());
+                Spout.getEngine().broadcastMessage("Your Version: " + pluginVersion + " New Version: " + newVersion, PERMISSIONS.MAKEMEMOD_ADMIN.asPermission());
                 newVersionAvailable = true;
             }
             this.newVersion = newVersion;
@@ -1054,7 +1054,7 @@ public abstract  class CommentConfiguration {
             CONFIG.CONFIG_VERSION.setConfigOption(configCurrent);
         } catch (WrongClassException e) {
             Logger.debug("Well that shouldn't happen",e);
-        }        
+        }
         return true;
     }
 

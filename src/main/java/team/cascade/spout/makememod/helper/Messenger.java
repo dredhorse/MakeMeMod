@@ -435,5 +435,17 @@ public final class Messenger {
         return authors.substring(2);
     }
 
+    /**
+     * Allows sending a broadcast message which is fully supported with the {@link #send(org.spout.api.command.CommandSource, String)}
+     * method.
+     *
+     * @param message
+     */
+    public static void broadcastMessage(String message){
+        for (Player player : Spout.getEngine().getOnlinePlayers()){
+            send(player,message);
+        }
+    }
+
 
 }

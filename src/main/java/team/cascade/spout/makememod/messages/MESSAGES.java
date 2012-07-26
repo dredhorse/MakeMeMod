@@ -13,12 +13,14 @@ import java.util.regex.Pattern;
 * * commentMessage  = comment which is being displayed in the properties file  <br>
 * <br>
 * <br>
-*
-* @todo You need to put the messages you want to translate into here, just take a look at the examples.
  */
 public enum MESSAGES {
-    TEMPLATE_MESSAGE(
-            "äöü æåéø Server will be stopped in %m minutes", "Warning Message displayed to announce server stop.");
+    CONFIGURATION_ERROR(
+            "Configuration error for command %(command)", "Message which is displayed when the command doesn't have 2 groups."),
+    YOU_DONT_HAVE_PERMISSION("You don't have the permission makememod.change.%(command)","Message which is displayed when the Player doesn't has the correct permission to execute the command"),
+    THERE_WAS_A_PROBLEM_CHANGING("{{RED}}There was a problem with changing %(player)","Message which is displayed when there was an issue changing the permission group of a player"),
+    SUCCESFULLY_CHANGED("Succesfully changend {{BLUE}}%(player){{RESET}} from group {{WHITE}}%(oldGroup){{RESET}} to {{WHITE}}%(newGroup){{RESET}}.","Message which is displayed when the group change was successful"),
+    YOU_ARE_NOT_IN_THE_CORRECT_GROUPS_TO_USE_THAT_COMMAND("You are not in %(oldGroup) or %(newGroup)","Message which is displayed when the player is not in any of the groups changed by the command");
     /* // NO CHANGES BELOW HERE!!!!!
 ;
 
