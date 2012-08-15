@@ -33,6 +33,23 @@ package team.cascade.spout.makememod.helper;
  * @version $FullVersion$
  */
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Level;
 
 import org.spout.api.Spout;
 import org.spout.api.exception.ConfigurationException;
@@ -40,14 +57,6 @@ import org.spout.api.plugin.Plugin;
 import org.spout.api.plugin.PluginDescriptionFile;
 import org.spout.api.scheduler.TaskPriority;
 import org.spout.api.util.config.yaml.YamlConfiguration;
-
-import java.io.*;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.*;
-import java.util.logging.Level;
 
 /**
  * <br>
@@ -357,7 +366,7 @@ public class Metrics {
         final StringBuilder data = new StringBuilder();
         data.append(encode("guid")).append('=').append(encode(guid));
         encodeDataPair(data, "version", description.getVersion());
-        encodeDataPair(data, "server", Spout.getAPIVersion());
+        encodeDataPair(data, "server", "SpoutServer " + Spout.getAPIVersion());
         encodeDataPair(data, "players", Integer.toString(Spout.getEngine().getOnlinePlayers().length));
         encodeDataPair(data, "revision", String.valueOf(REVISION));
 
@@ -394,17 +403,18 @@ public class Metrics {
         URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(plugin.getDescription().getName())));
 
         // Connect to the website
-        URLConnection connection;
+        HttpURLConnection connection;
 
         // Mineshafter creates a socks proxy, so we can safely bypass it
         // It does not reroute POST requests so we need to go around it
         if (isMineshafterPresent()) {
-            connection = url.openConnection(Proxy.NO_PROXY);
+            connection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
         } else {
-            connection = url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
         }
 
         connection.setDoOutput(true);
+		connection.setRequestMethod("POST");
 
         // Write the data
         final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());

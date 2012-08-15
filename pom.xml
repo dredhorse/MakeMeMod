@@ -4,7 +4,7 @@
 
     <groupId>team.cascade.spout</groupId>
     <artifactId>MakeMeMod</artifactId>
-    <version>0.9.1000-B0</version>
+    <version>0.9.1000-B1</version>
     <name>MakeMeMod</name>
     <url>https://github.com/dredhorse/MakeMeMod</url>
     <description>Some helper classes which support logging, command executing, commented config files and translation.
